@@ -13,7 +13,7 @@ Features:
 * Text-to-speech
 
 Requires: 
-* .NET Framework 4.5.2
+* .NET Framework 4.6
 * NAudio
 
 How to play sound effects over microphone:
