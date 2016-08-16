@@ -11,10 +11,6 @@ namespace JNSoundboard
 {
     public partial class MainForm : Form
     {
-        //private ISoundEngine soundEngine = null;
-        //private ISound lastSoundPlayed = null;
-        //private ISoundDeviceList playbackDevices;
-
         NAudio.Wave.WaveIn loopbackSourceStream = null;
         NAudio.Wave.WaveOut loopbackWaveOut = null;
         NAudio.Wave.WaveOut playbackWaveOut = null;
