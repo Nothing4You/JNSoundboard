@@ -186,7 +186,7 @@ namespace JNSoundboard
             
 
             playbackWaveOut.DeviceNumber = deviceNumber;
-            
+
             try
             {
                 playbackWaveOut.Init(new NAudio.Wave.AudioFileReader(file));
@@ -197,6 +197,13 @@ namespace JNSoundboard
             {
                 SystemSounds.Beep.Play();
                 MessageBox.Show(ex.ToString());
+            }
+            catch (NAudio.MmException ex)
+            {
+                SystemSounds.Beep.Play();
+                string msg = ex.ToString();
+                MessageBox.Show((msg.Contains("UnspecifiedError calling waveOutOpen") ? "Something is wrong with either the sound you tried to play (" + file.Substring(file.LastIndexOf("\\") + 1) + ") (try converting it to another format) or your sound card driver\n\n" + msg : msg));
+
             }
         }
 
