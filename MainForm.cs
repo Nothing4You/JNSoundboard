@@ -116,15 +116,16 @@ namespace JNSoundboard
             loopbackSourceStream = new NAudio.Wave.WaveIn();
             loopbackSourceStream.DeviceNumber = deviceNumber;
             loopbackSourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100, NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
+            loopbackSourceStream.BufferMilliseconds = 100;
 
-            NAudio.Wave.WaveInProvider waveIn = new NAudio.Wave.WaveInProvider(loopbackSourceStream);
+            var waveIn = new NAudio.Wave.WaveInProvider(loopbackSourceStream);
 
             loopbackWaveOut = new NAudio.Wave.WaveOut();
-            loopbackWaveOut.Init(waveIn);
             loopbackWaveOut.DeviceNumber = cbPlaybackDevices.SelectedIndex;
-
-            loopbackSourceStream.StartRecording();
+            loopbackWaveOut.Init(waveIn);
+            
             loopbackWaveOut.Play();
+            loopbackSourceStream.StartRecording();
         }
 
         private void stopLoopback()
