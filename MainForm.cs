@@ -342,6 +342,11 @@ namespace JNSoundboard
             }
         }
 
+        private void btnStopAll_Click(object sender, EventArgs e)
+        {
+            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) playbackWaveOut.Stop();
+        }
+
         private void btnLoad_Click(object sender, EventArgs e)
         {
             var diag = new OpenFileDialog();

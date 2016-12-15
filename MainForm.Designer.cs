@@ -51,6 +51,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbLoopbackDevices = new System.Windows.Forms.ComboBox();
             this.llBitcoinAddress = new System.Windows.Forms.LinkLabel();
+            this.btnStopAll = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +73,7 @@
             this.cbPlaybackDevices.Location = new System.Drawing.Point(108, 393);
             this.cbPlaybackDevices.Name = "cbPlaybackDevices";
             this.cbPlaybackDevices.Size = new System.Drawing.Size(240, 21);
-            this.cbPlaybackDevices.TabIndex = 8;
+            this.cbPlaybackDevices.TabIndex = 10;
             this.cbPlaybackDevices.SelectedIndexChanged += new System.EventHandler(this.cbPlaybackDevices_SelectedIndexChanged);
             // 
             // cbEnable
@@ -82,7 +83,7 @@
             this.cbEnable.Location = new System.Drawing.Point(511, 370);
             this.cbEnable.Name = "cbEnable";
             this.cbEnable.Size = new System.Drawing.Size(59, 17);
-            this.cbEnable.TabIndex = 12;
+            this.cbEnable.TabIndex = 14;
             this.cbEnable.Text = "Enable";
             this.cbEnable.UseVisualStyleBackColor = true;
             this.cbEnable.CheckedChanged += new System.EventHandler(this.cbEnable_CheckedChanged);
@@ -98,7 +99,7 @@
             this.btnTTS.Location = new System.Drawing.Point(484, 393);
             this.btnTTS.Name = "btnTTS";
             this.btnTTS.Size = new System.Drawing.Size(86, 23);
-            this.btnTTS.TabIndex = 11;
+            this.btnTTS.TabIndex = 13;
             this.btnTTS.Text = "Text-to-speech";
             this.btnTTS.UseVisualStyleBackColor = true;
             this.btnTTS.Click += new System.EventHandler(this.btnTTS_Click);
@@ -109,7 +110,7 @@
             this.btnSave.Location = new System.Drawing.Point(167, 345);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(145, 23);
-            this.btnSave.TabIndex = 6;
+            this.btnSave.TabIndex = 8;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -117,9 +118,9 @@
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(495, 187);
+            this.btnRemove.Location = new System.Drawing.Point(495, 125);
             this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(75, 72);
+            this.btnRemove.Size = new System.Drawing.Size(75, 43);
             this.btnRemove.TabIndex = 3;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
@@ -128,9 +129,9 @@
             // btnEdit
             // 
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEdit.Location = new System.Drawing.Point(495, 107);
+            this.btnEdit.Location = new System.Drawing.Point(495, 76);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 72);
+            this.btnEdit.Size = new System.Drawing.Size(75, 43);
             this.btnEdit.TabIndex = 2;
             this.btnEdit.Text = "Edit";
             this.btnEdit.UseVisualStyleBackColor = true;
@@ -141,7 +142,7 @@
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.Location = new System.Drawing.Point(495, 27);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 72);
+            this.btnAdd.Size = new System.Drawing.Size(75, 43);
             this.btnAdd.TabIndex = 1;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -183,7 +184,7 @@
             this.btnLoad.Location = new System.Drawing.Point(12, 345);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(145, 23);
-            this.btnLoad.TabIndex = 5;
+            this.btnLoad.TabIndex = 7;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
@@ -195,16 +196,16 @@
             this.btnReloadDevices.Location = new System.Drawing.Point(354, 419);
             this.btnReloadDevices.Name = "btnReloadDevices";
             this.btnReloadDevices.Size = new System.Drawing.Size(22, 22);
-            this.btnReloadDevices.TabIndex = 10;
+            this.btnReloadDevices.TabIndex = 12;
             this.btnReloadDevices.UseVisualStyleBackColor = true;
             this.btnReloadDevices.Click += new System.EventHandler(this.btnReloadDevices_Click);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(495, 267);
+            this.btnClear.Location = new System.Drawing.Point(495, 174);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 72);
+            this.btnClear.Size = new System.Drawing.Size(75, 43);
             this.btnClear.TabIndex = 4;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -216,7 +217,7 @@
             this.btnSaveAs.Location = new System.Drawing.Point(322, 345);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(145, 23);
-            this.btnSaveAs.TabIndex = 7;
+            this.btnSaveAs.TabIndex = 9;
             this.btnSaveAs.Text = "Save As";
             this.btnSaveAs.UseVisualStyleBackColor = true;
             this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
@@ -256,7 +257,7 @@
             this.cbLoopbackDevices.Location = new System.Drawing.Point(108, 420);
             this.cbLoopbackDevices.Name = "cbLoopbackDevices";
             this.cbLoopbackDevices.Size = new System.Drawing.Size(240, 21);
-            this.cbLoopbackDevices.TabIndex = 9;
+            this.cbLoopbackDevices.TabIndex = 11;
             this.cbLoopbackDevices.SelectedIndexChanged += new System.EventHandler(this.cbLoopbackDevices_SelectedIndexChanged);
             // 
             // llBitcoinAddress
@@ -271,11 +272,23 @@
             this.llBitcoinAddress.Text = "Buy the dev a cup of coffee (bitcoin)";
             this.llBitcoinAddress.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llBitcoinAddress_LinkClicked);
             // 
+            // btnStopAll
+            // 
+            this.btnStopAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStopAll.Location = new System.Drawing.Point(495, 272);
+            this.btnStopAll.Name = "btnStopAll";
+            this.btnStopAll.Size = new System.Drawing.Size(75, 43);
+            this.btnStopAll.TabIndex = 6;
+            this.btnStopAll.Text = "Stop all";
+            this.btnStopAll.UseVisualStyleBackColor = true;
+            this.btnStopAll.Click += new System.EventHandler(this.btnStopAll_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(580, 446);
+            this.Controls.Add(this.btnStopAll);
             this.Controls.Add(this.llBitcoinAddress);
             this.Controls.Add(this.cbLoopbackDevices);
             this.Controls.Add(this.label2);
@@ -328,6 +341,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbLoopbackDevices;
         private System.Windows.Forms.LinkLabel llBitcoinAddress;
+        private System.Windows.Forms.Button btnStopAll;
     }
 }
 
