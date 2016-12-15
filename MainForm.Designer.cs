@@ -51,6 +51,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbLoopbackDevices = new System.Windows.Forms.ComboBox();
             this.llBitcoinAddress = new System.Windows.Forms.LinkLabel();
+            this.btnPlay = new System.Windows.Forms.Button();
             this.btnStopAll = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -272,6 +273,17 @@
             this.llBitcoinAddress.Text = "Buy the dev a cup of coffee (bitcoin)";
             this.llBitcoinAddress.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llBitcoinAddress_LinkClicked);
             // 
+            // btnPlay
+            // 
+            this.btnPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPlay.Location = new System.Drawing.Point(495, 223);
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(75, 43);
+            this.btnPlay.TabIndex = 5;
+            this.btnPlay.Text = "Play";
+            this.btnPlay.UseVisualStyleBackColor = true;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
             // btnStopAll
             // 
             this.btnStopAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -289,6 +301,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(580, 446);
             this.Controls.Add(this.btnStopAll);
+            this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.llBitcoinAddress);
             this.Controls.Add(this.cbLoopbackDevices);
             this.Controls.Add(this.label2);
@@ -341,6 +354,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbLoopbackDevices;
         private System.Windows.Forms.LinkLabel llBitcoinAddress;
+        private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnStopAll;
     }
 }

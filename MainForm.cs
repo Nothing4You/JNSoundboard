@@ -342,6 +342,14 @@ namespace JNSoundboard
             }
         }
 
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            if (lvKeySounds.SelectedItems.Count > 0)
+            {
+                PlayKeySound(keysSounds[lvKeySounds.SelectedIndices[0]]);
+            }
+        }
+
         private void btnStopAll_Click(object sender, EventArgs e)
         {
             if (playbackWaveOut != null && playbackWaveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) playbackWaveOut.Stop();
@@ -464,45 +472,9 @@ namespace JNSoundboard
                         {
                             if (keysJustPressed != keysSounds[i].Keys)
                             {
-                                string path;
-
                                 if (keysSounds[i].Keys.Length > 0 && keysSounds[i].Keys.All(x => x != 0) && keysSounds[i].SoundLocations.Length > 0 && keysSounds[i].SoundLocations.Length > 0 && keysSounds[i].SoundLocations.Any(x => File.Exists(x)))
                                 {
-                                    Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
-
-                                    if (keysSounds[i].SoundLocations.Length > 1)
-                                    {
-                                        int temp;
-
-                                        while (true)
-                                        {
-                                            temp = rand.Next(0, keysSounds[i].SoundLocations.Length);
-
-                                            if (temp != lastIndex && File.Exists(keysSounds[i].SoundLocations[temp])) break;
-                                            Thread.Sleep(1);
-                                        }
-
-                                        lastIndex = temp;
-
-                                        path = keysSounds[i].SoundLocations[lastIndex];
-                                    }
-                                    else
-                                    {
-                                        path = keysSounds[i].SoundLocations[0];
-                                    }
-
-                                    if (File.Exists(path))
-                                    {
-                                        playSound(path);
-                                        keysJustPressed = keysSounds[i].Keys;
-                                    }
-                                    else if (!showingMsgBox)
-                                    {
-                                        SystemSounds.Beep.Play();
-                                        showingMsgBox = true;
-                                        MessageBox.Show("File " + path + " does not exist");
-                                        showingMsgBox = false;
-                                    }
+                                    PlayKeySound(keysSounds[i]);
                                     return;
                                 }
                             }
@@ -576,6 +548,47 @@ namespace JNSoundboard
                     keysPressed = 0;
                 }
             }
+        }
+
+        private void PlayKeySound(XMLSettings.KeysSounds currentKeysSounds)
+        {
+            Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+
+            string path;
+            if (currentKeysSounds.SoundLocations.Length > 1)
+            {
+                int temp;
+
+                while (true)
+                {
+                    temp = rand.Next(0, currentKeysSounds.SoundLocations.Length);
+
+                    if (temp != lastIndex && File.Exists(currentKeysSounds.SoundLocations[temp])) break;
+                    Thread.Sleep(1);
+                }
+
+                lastIndex = temp;
+
+                path = currentKeysSounds.SoundLocations[lastIndex];
+            }
+            else
+            {
+                path = currentKeysSounds.SoundLocations[0];
+            }
+
+            if (File.Exists(path))
+            {
+                playSound(path);
+                keysJustPressed = currentKeysSounds.Keys;
+            }
+            else if (!showingMsgBox)
+            {
+                SystemSounds.Beep.Play();
+                showingMsgBox = true;
+                MessageBox.Show("File " + path + " does not exist");
+                showingMsgBox = false;
+            }
+            return;
         }
 
         private void cbLoopbackDevices_SelectedIndexChanged(object sender, EventArgs e)
