@@ -6,14 +6,16 @@ using System.Linq;
 using System.Threading;
 using System.Media;
 using System.Net;
+using NAudio.Wave;
 
 namespace JNSoundboard
 {
     public partial class MainForm : Form
     {
-        NAudio.Wave.WaveIn loopbackSourceStream = null;
-        NAudio.Wave.WaveOut loopbackWaveOut = null;
-        NAudio.Wave.WaveOut playbackWaveOut = null;
+        private WaveIn loopbackSourceStream = null;
+        private BufferedWaveProvider loopbackWaveProvider = null;
+        private WaveOut loopbackWaveOut = null;
+        private WaveOut playbackWaveOut = null;
 
         private Random rand = new Random();
 
@@ -74,17 +76,17 @@ namespace JNSoundboard
 
         private void loadSoundDevices()
         {
-            var playbackSources = new List<NAudio.Wave.WaveOutCapabilities>();
-            var loopbackSources = new List<NAudio.Wave.WaveInCapabilities>();
+            var playbackSources = new List<WaveOutCapabilities>();
+            var loopbackSources = new List<WaveInCapabilities>();
 
-            for (int i = 0; i < NAudio.Wave.WaveOut.DeviceCount; i++)
+            for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
-                playbackSources.Add(NAudio.Wave.WaveOut.GetCapabilities(i));
+                playbackSources.Add(WaveOut.GetCapabilities(i));
             }
 
-            for (int i = 0; i < NAudio.Wave.WaveIn.DeviceCount; i++)
+            for (int i = 0; i < WaveIn.DeviceCount; i++)
             {
-                loopbackSources.Add(NAudio.Wave.WaveIn.GetCapabilities(i));
+                loopbackSources.Add(WaveIn.GetCapabilities(i));
             }
 
             cbPlaybackDevices.Items.Clear();
@@ -113,19 +115,21 @@ namespace JNSoundboard
 
             int deviceNumber = cbLoopbackDevices.SelectedIndex - 1;
 
-            loopbackSourceStream = new NAudio.Wave.WaveIn();
+            loopbackSourceStream = new WaveIn();
             loopbackSourceStream.DeviceNumber = deviceNumber;
-            loopbackSourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100, NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
-            loopbackSourceStream.BufferMilliseconds = 100;
+            loopbackSourceStream.WaveFormat = new WaveFormat(44100, WaveIn.GetCapabilities(deviceNumber).Channels);
+            loopbackSourceStream.BufferMilliseconds = 25;
+            loopbackSourceStream.DataAvailable += loopbackSourceStream_DataAvailable;
 
-            var waveIn = new NAudio.Wave.WaveInProvider(loopbackSourceStream);
+            loopbackWaveProvider = new BufferedWaveProvider(loopbackSourceStream.WaveFormat);
 
-            loopbackWaveOut = new NAudio.Wave.WaveOut();
+            loopbackWaveOut = new WaveOut();
             loopbackWaveOut.DeviceNumber = cbPlaybackDevices.SelectedIndex;
-            loopbackWaveOut.Init(waveIn);
-            
-            loopbackWaveOut.Play();
+            loopbackWaveOut.DesiredLatency = 100;
+            loopbackWaveOut.Init(loopbackWaveProvider);
+
             loopbackSourceStream.StartRecording();
+            loopbackWaveOut.Play();
         }
 
         private void stopLoopback()
@@ -164,7 +168,7 @@ namespace JNSoundboard
             {
                 try
                 {
-                    playbackWaveOut.Stop();
+                    if (playbackWaveOut.PlaybackState == PlaybackState.Playing) playbackWaveOut.Stop();
                 }
                 catch (Exception) { }
 
@@ -179,14 +183,14 @@ namespace JNSoundboard
 
             stopPlayback();
 
-            if (playbackWaveOut == null) playbackWaveOut = new NAudio.Wave.WaveOut();
+            if (playbackWaveOut == null) playbackWaveOut = new WaveOut();
             
 
             playbackWaveOut.DeviceNumber = deviceNumber;
 
             try
             {
-                playbackWaveOut.Init(new NAudio.Wave.AudioFileReader(file));
+                playbackWaveOut.Init(new AudioFileReader(file));
 
                 playbackWaveOut.Play();
             }
@@ -281,8 +285,13 @@ namespace JNSoundboard
             else
             {
                 SystemSounds.Beep.Play();
-                MessageBox.Show("Returned null or KeysSounds.Length == 0");
+                MessageBox.Show("No entries found, or there was an error reading the settings file");
             }
+        }
+
+        private void loopbackSourceStream_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (loopbackWaveProvider != null) loopbackWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -342,17 +351,17 @@ namespace JNSoundboard
             }
         }
 
-        private void btnPlay_Click(object sender, EventArgs e)
+        private void btnPlaySound_Click(object sender, EventArgs e)
         {
             if (lvKeySounds.SelectedItems.Count > 0)
             {
-                PlayKeySound(keysSounds[lvKeySounds.SelectedIndices[0]]);
+                playKeySound(keysSounds[lvKeySounds.SelectedIndices[0]]);
             }
         }
 
-        private void btnStopAll_Click(object sender, EventArgs e)
+        private void btnStopAllSounds_Click(object sender, EventArgs e)
         {
-            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) playbackWaveOut.Stop();
+            stopPlayback();
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -474,7 +483,7 @@ namespace JNSoundboard
                             {
                                 if (keysSounds[i].Keys.Length > 0 && keysSounds[i].Keys.All(x => x != 0) && keysSounds[i].SoundLocations.Length > 0 && keysSounds[i].SoundLocations.Length > 0 && keysSounds[i].SoundLocations.Any(x => File.Exists(x)))
                                 {
-                                    PlayKeySound(keysSounds[i]);
+                                    playKeySound(keysSounds[i]);
                                     return;
                                 }
                             }
@@ -499,7 +508,7 @@ namespace JNSoundboard
                     {
                         if (keysJustPressed == null || !keysJustPressed.Intersect(keysStopSound).Any())
                         {
-                            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing) playbackWaveOut.Stop();
+                            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == PlaybackState.Playing) playbackWaveOut.Stop();
 
                             keysJustPressed = keysStopSound;
 
@@ -550,11 +559,12 @@ namespace JNSoundboard
             }
         }
 
-        private void PlayKeySound(XMLSettings.KeysSounds currentKeysSounds)
+        private void playKeySound(XMLSettings.KeysSounds currentKeysSounds)
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
 
             string path;
+
             if (currentKeysSounds.SoundLocations.Length > 1)
             {
                 int temp;
@@ -588,7 +598,6 @@ namespace JNSoundboard
                 MessageBox.Show("File " + path + " does not exist");
                 showingMsgBox = false;
             }
-            return;
         }
 
         private void cbLoopbackDevices_SelectedIndexChanged(object sender, EventArgs e)
@@ -614,7 +623,7 @@ namespace JNSoundboard
                 startLoopback();
             }
 
-            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
+            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == PlaybackState.Playing)
             {
                 stopPlayback();
             }
@@ -624,18 +633,22 @@ namespace JNSoundboard
         {
             Clipboard.SetText("8e0029c2-9bed-41ee-9ec5-3950fa463fa");
 
-            string bcMarkets = new WebClient().DownloadString(@"http://blockchain.info/ticker");
-
             string fiveBucksInBitcoin = "";
 
-            if (bcMarkets.Contains("\"15m\" : "))
+            try
             {
-                int startIndex = bcMarkets.IndexOf("\"15m\" : ") + 8;
-                float usdPrice = float.Parse(bcMarkets.Substring(startIndex, bcMarkets.IndexOf(',') - startIndex));
-                float bitcoinOfFiveBucks = 1f / (usdPrice / 5f);
+                string bcMarkets = new WebClient().DownloadString(@"http://blockchain.info/ticker");
+                
+                if (bcMarkets.Contains("\"15m\" : "))
+                {
+                    int startIndex = bcMarkets.IndexOf("\"15m\" : ") + 8;
+                    float usdPrice = float.Parse(bcMarkets.Substring(startIndex, bcMarkets.IndexOf(',') - startIndex));
+                    float bitcoinOfFiveBucks = 1f / (usdPrice / 5f);
 
-                fiveBucksInBitcoin = "\n\n$5 in bitcoin is " + bitcoinOfFiveBucks.ToString();
+                    fiveBucksInBitcoin = "\n\n$5 in bitcoin is " + bitcoinOfFiveBucks.ToString();
+                }
             }
+            catch (Exception) { }
 
             MessageBox.Show("My bitcoin address (8e0029c2-9bed-41ee-9ec5-3950fa463fa) has been copied to the clipboard." + fiveBucksInBitcoin);
         }

@@ -51,8 +51,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbLoopbackDevices = new System.Windows.Forms.ComboBox();
             this.llBitcoinAddress = new System.Windows.Forms.LinkLabel();
-            this.btnPlay = new System.Windows.Forms.Button();
-            this.btnStopAll = new System.Windows.Forms.Button();
+            this.btnPlaySelectedSound = new System.Windows.Forms.Button();
+            this.btnStopAllSounds = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +60,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 396);
+            this.label1.Location = new System.Drawing.Point(12, 436);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 13);
             this.label1.TabIndex = 5;
@@ -71,7 +71,7 @@
             this.cbPlaybackDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbPlaybackDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPlaybackDevices.FormattingEnabled = true;
-            this.cbPlaybackDevices.Location = new System.Drawing.Point(108, 393);
+            this.cbPlaybackDevices.Location = new System.Drawing.Point(108, 433);
             this.cbPlaybackDevices.Name = "cbPlaybackDevices";
             this.cbPlaybackDevices.Size = new System.Drawing.Size(240, 21);
             this.cbPlaybackDevices.TabIndex = 10;
@@ -81,7 +81,7 @@
             // 
             this.cbEnable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbEnable.AutoSize = true;
-            this.cbEnable.Location = new System.Drawing.Point(511, 370);
+            this.cbEnable.Location = new System.Drawing.Point(551, 410);
             this.cbEnable.Name = "cbEnable";
             this.cbEnable.Size = new System.Drawing.Size(59, 17);
             this.cbEnable.TabIndex = 14;
@@ -97,7 +97,7 @@
             // btnTTS
             // 
             this.btnTTS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTTS.Location = new System.Drawing.Point(484, 393);
+            this.btnTTS.Location = new System.Drawing.Point(524, 433);
             this.btnTTS.Name = "btnTTS";
             this.btnTTS.Size = new System.Drawing.Size(86, 23);
             this.btnTTS.TabIndex = 13;
@@ -108,7 +108,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(167, 345);
+            this.btnSave.Location = new System.Drawing.Point(167, 385);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(145, 23);
             this.btnSave.TabIndex = 8;
@@ -119,7 +119,7 @@
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(495, 125);
+            this.btnRemove.Location = new System.Drawing.Point(535, 125);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 43);
             this.btnRemove.TabIndex = 3;
@@ -130,7 +130,7 @@
             // btnEdit
             // 
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEdit.Location = new System.Drawing.Point(495, 76);
+            this.btnEdit.Location = new System.Drawing.Point(535, 76);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(75, 43);
             this.btnEdit.TabIndex = 2;
@@ -141,7 +141,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.Location = new System.Drawing.Point(495, 27);
+            this.btnAdd.Location = new System.Drawing.Point(535, 27);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 43);
             this.btnAdd.TabIndex = 1;
@@ -163,7 +163,7 @@
             this.lvKeySounds.Location = new System.Drawing.Point(12, 27);
             this.lvKeySounds.MultiSelect = false;
             this.lvKeySounds.Name = "lvKeySounds";
-            this.lvKeySounds.Size = new System.Drawing.Size(477, 312);
+            this.lvKeySounds.Size = new System.Drawing.Size(517, 352);
             this.lvKeySounds.TabIndex = 0;
             this.lvKeySounds.UseCompatibleStateImageBehavior = false;
             this.lvKeySounds.View = System.Windows.Forms.View.Details;
@@ -182,7 +182,7 @@
             // btnLoad
             // 
             this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLoad.Location = new System.Drawing.Point(12, 345);
+            this.btnLoad.Location = new System.Drawing.Point(12, 385);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(145, 23);
             this.btnLoad.TabIndex = 7;
@@ -194,7 +194,7 @@
             // 
             this.btnReloadDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnReloadDevices.Image = ((System.Drawing.Image)(resources.GetObject("btnReloadDevices.Image")));
-            this.btnReloadDevices.Location = new System.Drawing.Point(354, 419);
+            this.btnReloadDevices.Location = new System.Drawing.Point(354, 459);
             this.btnReloadDevices.Name = "btnReloadDevices";
             this.btnReloadDevices.Size = new System.Drawing.Size(22, 22);
             this.btnReloadDevices.TabIndex = 12;
@@ -204,7 +204,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(495, 174);
+            this.btnClear.Location = new System.Drawing.Point(535, 174);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 43);
             this.btnClear.TabIndex = 4;
@@ -215,7 +215,7 @@
             // btnSaveAs
             // 
             this.btnSaveAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSaveAs.Location = new System.Drawing.Point(322, 345);
+            this.btnSaveAs.Location = new System.Drawing.Point(322, 385);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(145, 23);
             this.btnSaveAs.TabIndex = 9;
@@ -229,7 +229,7 @@
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(580, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(620, 24);
             this.menuStrip1.TabIndex = 17;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -244,7 +244,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 422);
+            this.label2.Location = new System.Drawing.Point(12, 462);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(90, 13);
             this.label2.TabIndex = 18;
@@ -255,7 +255,7 @@
             this.cbLoopbackDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbLoopbackDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbLoopbackDevices.FormattingEnabled = true;
-            this.cbLoopbackDevices.Location = new System.Drawing.Point(108, 420);
+            this.cbLoopbackDevices.Location = new System.Drawing.Point(108, 460);
             this.cbLoopbackDevices.Name = "cbLoopbackDevices";
             this.cbLoopbackDevices.Size = new System.Drawing.Size(240, 21);
             this.cbLoopbackDevices.TabIndex = 11;
@@ -265,7 +265,7 @@
             // 
             this.llBitcoinAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.llBitcoinAddress.AutoSize = true;
-            this.llBitcoinAddress.Location = new System.Drawing.Point(391, 424);
+            this.llBitcoinAddress.Location = new System.Drawing.Point(431, 464);
             this.llBitcoinAddress.Name = "llBitcoinAddress";
             this.llBitcoinAddress.Size = new System.Drawing.Size(179, 13);
             this.llBitcoinAddress.TabIndex = 19;
@@ -273,35 +273,35 @@
             this.llBitcoinAddress.Text = "Buy the dev a cup of coffee (bitcoin)";
             this.llBitcoinAddress.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llBitcoinAddress_LinkClicked);
             // 
-            // btnPlay
+            // btnPlaySelectedSound
             // 
-            this.btnPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPlay.Location = new System.Drawing.Point(495, 223);
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(75, 43);
-            this.btnPlay.TabIndex = 5;
-            this.btnPlay.Text = "Play";
-            this.btnPlay.UseVisualStyleBackColor = true;
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            this.btnPlaySelectedSound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPlaySelectedSound.Location = new System.Drawing.Point(535, 287);
+            this.btnPlaySelectedSound.Name = "btnPlaySelectedSound";
+            this.btnPlaySelectedSound.Size = new System.Drawing.Size(75, 43);
+            this.btnPlaySelectedSound.TabIndex = 5;
+            this.btnPlaySelectedSound.Text = "Play sound";
+            this.btnPlaySelectedSound.UseVisualStyleBackColor = true;
+            this.btnPlaySelectedSound.Click += new System.EventHandler(this.btnPlaySound_Click);
             // 
-            // btnStopAll
+            // btnStopAllSounds
             // 
-            this.btnStopAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStopAll.Location = new System.Drawing.Point(495, 272);
-            this.btnStopAll.Name = "btnStopAll";
-            this.btnStopAll.Size = new System.Drawing.Size(75, 43);
-            this.btnStopAll.TabIndex = 6;
-            this.btnStopAll.Text = "Stop all";
-            this.btnStopAll.UseVisualStyleBackColor = true;
-            this.btnStopAll.Click += new System.EventHandler(this.btnStopAll_Click);
+            this.btnStopAllSounds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStopAllSounds.Location = new System.Drawing.Point(535, 336);
+            this.btnStopAllSounds.Name = "btnStopAllSounds";
+            this.btnStopAllSounds.Size = new System.Drawing.Size(75, 43);
+            this.btnStopAllSounds.TabIndex = 6;
+            this.btnStopAllSounds.Text = "Stop all sounds";
+            this.btnStopAllSounds.UseVisualStyleBackColor = true;
+            this.btnStopAllSounds.Click += new System.EventHandler(this.btnStopAllSounds_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(580, 446);
-            this.Controls.Add(this.btnStopAll);
-            this.Controls.Add(this.btnPlay);
+            this.ClientSize = new System.Drawing.Size(620, 486);
+            this.Controls.Add(this.btnStopAllSounds);
+            this.Controls.Add(this.btnPlaySelectedSound);
             this.Controls.Add(this.llBitcoinAddress);
             this.Controls.Add(this.cbLoopbackDevices);
             this.Controls.Add(this.label2);
@@ -321,7 +321,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(566, 477);
+            this.MinimumSize = new System.Drawing.Size(580, 480);
             this.Name = "MainForm";
             this.Text = "Soundboard";
             this.menuStrip1.ResumeLayout(false);
@@ -354,8 +354,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbLoopbackDevices;
         private System.Windows.Forms.LinkLabel llBitcoinAddress;
-        private System.Windows.Forms.Button btnPlay;
-        private System.Windows.Forms.Button btnStopAll;
+        private System.Windows.Forms.Button btnPlaySelectedSound;
+        private System.Windows.Forms.Button btnStopAllSounds;
     }
 }
 
