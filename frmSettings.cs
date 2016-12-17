@@ -6,46 +6,45 @@ using System.Windows.Forms;
 
 namespace JNSoundboard
 {
-    public partial class SoundboardSettings : Form
+    public partial class frmSettings : Form
     {
-        internal string keysStopSound = "";
+        private string keysStopSound = "";
         internal List<XMLSettings.LoadXMLFile> loadSettingsFileKeys = new List<XMLSettings.LoadXMLFile>();
 
         internal static bool addingOrEditing = false;
         internal int editIndex = -1;
         internal string[] editKeysLoc = null;
 
-        private MainForm mainForm = null;
+        private frmMain mainForm = null;
 
-        public SoundboardSettings()
+        public frmSettings()
         {
             InitializeComponent();
 
-            mainForm = Application.OpenForms[0] as MainForm;
+            mainForm = Application.OpenForms[0] as frmMain;
 
-            keysStopSound = Helper.keysArrayToString(mainForm.keysStopSound);
+            keysStopSound = Helper.keysArrayToString(XMLSettings.keysStopSound);
 
-            for (int i = 0; i < mainForm.loadSettingsKeysLoc.Count; i++)
+            for (int i = 0; i < XMLSettings.loadXMLFileKeys.Count; i++)
             {
-                loadSettingsFileKeys.Add(new XMLSettings.LoadXMLFile(Helper.keysArrayToString(mainForm.loadSettingsKeysLoc[i].Item1), mainForm.loadSettingsKeysLoc[i].Item2));
-            }
+                loadSettingsFileKeys.Add(new XMLSettings.LoadXMLFile(Helper.keysArrayToString(XMLSettings.loadXMLFileKeys[i].Item1), XMLSettings.loadXMLFileKeys[i].Item2));
 
-            tbStopSoundKeys.Text = keysStopSound;
-
-            for (int i = 0; i < loadSettingsFileKeys.Count; i++)
-            {
                 var item = new ListViewItem((loadSettingsFileKeys[i].Keys.Length > 0 ? string.Join("+", loadSettingsFileKeys[i].Keys) : ""));
                 item.SubItems.Add(((string.IsNullOrWhiteSpace(loadSettingsFileKeys[i].XMLLocation) || !File.Exists(loadSettingsFileKeys[i].XMLLocation)) ? "" : loadSettingsFileKeys[i].XMLLocation));
 
                 lvKeysLocs.Items.Add(item);
             }
+
+            tbStopSoundKeys.Text = keysStopSound;
+
+            cbMinimizeToTray.Checked = XMLSettings.minimizeToTray;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             addingOrEditing = true;
 
-            var form = new AddEditKeysLocation();
+            var form = new frmAddEditKSs();
             form.ShowDialog();
 
             addingOrEditing = false;
@@ -59,7 +58,7 @@ namespace JNSoundboard
                 editIndex = lvKeysLocs.SelectedIndices[0];
                 editKeysLoc = new string[] { lvKeysLocs.SelectedItems[0].Text, lvKeysLocs.SelectedItems[0].SubItems[1].Text };
 
-                var form = new AddEditKeysLocation();
+                var form = new frmAddEditKSs();
                 form.ShowDialog();
 
                 editIndex = -1;
@@ -88,19 +87,21 @@ namespace JNSoundboard
             {
                 if (loadSettingsFileKeys.Count == 0 || loadSettingsFileKeys.All(x => x.Keys.Length > 0 && !string.IsNullOrWhiteSpace(x.XMLLocation) && File.Exists(x.XMLLocation)))
                 {
-                    mainForm.keysStopSound = (keysArr == null ? new Keys[] { } : keysArr);
+                    XMLSettings.keysStopSound = (keysArr == null ? new Keys[] { } : keysArr);
 
-                    mainForm.loadSettingsKeysLoc.Clear();
+                    XMLSettings.loadXMLFileKeys.Clear();
 
                     for (int i = 0; i < loadSettingsFileKeys.Count; i++)
                     {
                         if (Helper.keysArrayFromString(loadSettingsFileKeys[i].Keys, out keysArr, out error))
                         {
-                            mainForm.loadSettingsKeysLoc.Add(new Tuple<Keys[], string>(keysArr, loadSettingsFileKeys[i].XMLLocation));
+                            XMLSettings.loadXMLFileKeys.Add(new Tuple<Keys[], string>(keysArr, loadSettingsFileKeys[i].XMLLocation));
                         }
                     }
 
-                    XMLSettings.WriteXML(new XMLSettings.SoundboardSettings(tbStopSoundKeys.Text, loadSettingsFileKeys.ToArray()), Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml");
+                    XMLSettings.minimizeToTray = cbMinimizeToTray.Checked;
+
+                    XMLSettings.WriteXML(new XMLSettings.SoundboardSettings(tbStopSoundKeys.Text, loadSettingsFileKeys.ToArray(), cbMinimizeToTray.Checked), Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml");
 
                     this.Close();
                 }

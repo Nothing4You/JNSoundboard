@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -9,6 +11,10 @@ namespace JNSoundboard
 {
     public class XMLSettings
     {
+        internal static Keys[] keysStopSound = null;
+        internal static List<Tuple<Keys[], string>> loadXMLFileKeys = new List<Tuple<Keys[], string>>();
+        internal static bool minimizeToTray = true;
+
         //saving XML files like this makes the XML messy, but it works. if you can un-messy it, please do it and make a pull request :)
         #region Keys and sounds settings
         public class KeysSounds
@@ -59,13 +65,15 @@ namespace JNSoundboard
         {
             public string StopSoundKeys;
             public LoadXMLFile[] LoadXMLFiles;
+            public bool MinimizeToTray;
 
             public SoundboardSettings() { }
 
-            public SoundboardSettings(string stopSoundKeys, LoadXMLFile[] loadXMLFiles)
+            public SoundboardSettings(string stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray)
             {
                 StopSoundKeys = stopSoundKeys;
                 LoadXMLFiles = loadXMLFiles;
+                MinimizeToTray = minimizeToTray;
             }
         }
         #endregion
@@ -111,9 +119,50 @@ namespace JNSoundboard
             {
                 if (serializer.CanDeserialize(reader))
                 {
-                    return (object)serializer.Deserialize(reader);
+                    return serializer.Deserialize(reader);
                 }
                 else return null;
+            }
+        }
+
+        internal static void LoadXML()
+        {
+            string filePath = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml";
+
+            if (File.Exists(filePath))
+            {
+                var settings = (SoundboardSettings)ReadXML(typeof(SoundboardSettings), filePath);
+
+                if (settings.StopSoundKeys != null)
+                {
+                    Keys[] keysArr = null;
+                    string error = "";
+
+                    if (Helper.keysArrayFromString(settings.StopSoundKeys, out keysArr, out error))
+                        keysStopSound = keysArr;
+                    else if (error != "Key string \"\" doesn't exist")
+                        MessageBox.Show(error);
+                }
+                else keysStopSound = new Keys[] { };
+
+                if (settings.LoadXMLFiles != null && settings.LoadXMLFiles.Any(x => x.Keys != null && x.Keys.Length > 0 && !string.IsNullOrWhiteSpace(string.Join("", x.Keys)) && !string.IsNullOrWhiteSpace(x.XMLLocation) && File.Exists(x.XMLLocation)))
+                {
+                    for (int i = 0; i < settings.LoadXMLFiles.Length; i++)
+                    {
+                        Keys[] keysArr;
+                        string error;
+
+                        if (Helper.keysArrayFromString(settings.LoadXMLFiles[i].Keys, out keysArr, out error))
+                            loadXMLFileKeys.Add(new Tuple<Keys[], string>(keysArr, settings.LoadXMLFiles[i].XMLLocation));
+                    }
+                }
+
+                minimizeToTray = settings.MinimizeToTray;
+            }
+            else
+            {
+                WriteXML(new SoundboardSettings("", new LoadXMLFile[] { new LoadXMLFile("", "") }, true), filePath);
+                keysStopSound = new Keys[] { };
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace JNSoundboard
 {
-    partial class MainForm
+    partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.label1 = new System.Windows.Forms.Label();
             this.cbPlaybackDevices = new System.Windows.Forms.ComboBox();
             this.cbEnable = new System.Windows.Forms.CheckBox();
@@ -50,9 +50,9 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.cbLoopbackDevices = new System.Windows.Forms.ComboBox();
-            this.llBitcoinAddress = new System.Windows.Forms.LinkLabel();
             this.btnPlaySelectedSound = new System.Windows.Forms.Button();
             this.btnStopAllSounds = new System.Windows.Forms.Button();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,7 +81,7 @@
             // 
             this.cbEnable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbEnable.AutoSize = true;
-            this.cbEnable.Location = new System.Drawing.Point(551, 410);
+            this.cbEnable.Location = new System.Drawing.Point(551, 434);
             this.cbEnable.Name = "cbEnable";
             this.cbEnable.Size = new System.Drawing.Size(59, 17);
             this.cbEnable.TabIndex = 14;
@@ -97,7 +97,7 @@
             // btnTTS
             // 
             this.btnTTS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTTS.Location = new System.Drawing.Point(524, 433);
+            this.btnTTS.Location = new System.Drawing.Point(524, 457);
             this.btnTTS.Name = "btnTTS";
             this.btnTTS.Size = new System.Drawing.Size(86, 23);
             this.btnTTS.TabIndex = 13;
@@ -261,18 +261,6 @@
             this.cbLoopbackDevices.TabIndex = 11;
             this.cbLoopbackDevices.SelectedIndexChanged += new System.EventHandler(this.cbLoopbackDevices_SelectedIndexChanged);
             // 
-            // llBitcoinAddress
-            // 
-            this.llBitcoinAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.llBitcoinAddress.AutoSize = true;
-            this.llBitcoinAddress.Location = new System.Drawing.Point(431, 464);
-            this.llBitcoinAddress.Name = "llBitcoinAddress";
-            this.llBitcoinAddress.Size = new System.Drawing.Size(179, 13);
-            this.llBitcoinAddress.TabIndex = 19;
-            this.llBitcoinAddress.TabStop = true;
-            this.llBitcoinAddress.Text = "Buy the dev a cup of coffee (bitcoin)";
-            this.llBitcoinAddress.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llBitcoinAddress_LinkClicked);
-            // 
             // btnPlaySelectedSound
             // 
             this.btnPlaySelectedSound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -295,14 +283,23 @@
             this.btnStopAllSounds.UseVisualStyleBackColor = true;
             this.btnStopAllSounds.Click += new System.EventHandler(this.btnStopAllSounds_Click);
             // 
-            // MainForm
+            // notifyIcon1
+            // 
+            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon1.BalloonTipText = "Minimized to the tray.";
+            this.notifyIcon1.BalloonTipTitle = "JN Soundboard";
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "JN Soundboard";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
+            // 
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(620, 486);
             this.Controls.Add(this.btnStopAllSounds);
             this.Controls.Add(this.btnPlaySelectedSound);
-            this.Controls.Add(this.llBitcoinAddress);
             this.Controls.Add(this.cbLoopbackDevices);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSaveAs);
@@ -322,8 +319,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(580, 480);
-            this.Name = "MainForm";
-            this.Text = "Soundboard";
+            this.Name = "frmMain";
+            this.Text = "JN Soundboard";
+            this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -353,9 +351,9 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbLoopbackDevices;
-        private System.Windows.Forms.LinkLabel llBitcoinAddress;
         private System.Windows.Forms.Button btnPlaySelectedSound;
         private System.Windows.Forms.Button btnStopAllSounds;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

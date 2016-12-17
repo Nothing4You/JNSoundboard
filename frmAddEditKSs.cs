@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace JNSoundboard
 {
-    public partial class AddEditKeysLocation : Form
+    public partial class frmAddEditKSs : Form
     {
         internal class ListViewItemComparer : IComparer
         {
@@ -29,10 +29,13 @@ namespace JNSoundboard
             }
         }
 
-        private MainForm mainForm = null;
-        private SoundboardSettings settingsForm = null;
+        internal string[] editSoundKeys = null;
+        internal int editIndex = -1;
 
-        public AddEditKeysLocation()
+        private frmMain mainForm = null;
+        private frmSettings settingsForm = null;
+
+        public frmAddEditKSs()
         {
             InitializeComponent();
         }
@@ -46,11 +49,11 @@ namespace JNSoundboard
 
         private void AddEditSoundKeys_Load(object sender, EventArgs e)
         {
-            if (SoundboardSettings.addingOrEditing)
+            if (frmSettings.addingOrEditing)
             {
                 this.Text = "Add/edit keys and XML location";
 
-                settingsForm = Application.OpenForms[1] as SoundboardSettings;
+                settingsForm = Application.OpenForms[1] as frmSettings;
 
                 if (settingsForm.editIndex != -1)
                 {
@@ -62,12 +65,12 @@ namespace JNSoundboard
             {
                 labelLoc.Text += " (use a semi-colon (;) to seperate multiple locations)";
 
-                mainForm = Application.OpenForms[0] as MainForm;
+                mainForm = Application.OpenForms[0] as frmMain;
 
-                if (mainForm.editIndex != -1)
+                if (editIndex != -1)
                 {
-                    tbKeys.Text = mainForm.editSoundKeys[0];
-                    tbLocation.Text = mainForm.editSoundKeys[1];
+                    tbKeys.Text = editSoundKeys[0];
+                    tbLocation.Text = editSoundKeys[1];
                 }
             }
         }
@@ -79,9 +82,9 @@ namespace JNSoundboard
                 string[] soundLocs = null;
                 string errorMessage = "";
 
-                if (!SoundboardSettings.addingOrEditing)
+                if (!frmSettings.addingOrEditing)
                 {
-                    if (!SoundboardSettings.addingOrEditing && Helper.soundLocsArrayFromString(tbLocation.Text, out soundLocs, out errorMessage))
+                    if (!frmSettings.addingOrEditing && Helper.soundLocsArrayFromString(tbLocation.Text, out soundLocs, out errorMessage))
                     {
                         if (soundLocs.Any(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)))
                         {
@@ -104,7 +107,7 @@ namespace JNSoundboard
 
                 if (Helper.keysArrayFromString(tbKeys.Text, out kKeys, out errorMessage))
                 {
-                    if (SoundboardSettings.addingOrEditing)
+                    if (frmSettings.addingOrEditing)
                     {
                         if (settingsForm.editIndex != -1)
                         {
@@ -126,12 +129,12 @@ namespace JNSoundboard
                     }
                     else
                     {
-                        if (mainForm.editIndex > -1)
+                        if (editIndex > -1)
                         {
-                            mainForm.lvKeySounds.Items[mainForm.editIndex].Text = tbKeys.Text;
-                            mainForm.lvKeySounds.Items[mainForm.editIndex].SubItems[1].Text = tbLocation.Text;
+                            mainForm.lvKeySounds.Items[editIndex].Text = tbKeys.Text;
+                            mainForm.lvKeySounds.Items[editIndex].SubItems[1].Text = tbLocation.Text;
 
-                            mainForm.keysSounds[mainForm.editIndex] = new XMLSettings.KeysSounds(kKeys, soundLocs);
+                            mainForm.keysSounds[editIndex] = new XMLSettings.KeysSounds(kKeys, soundLocs);
                         }
                         else
                         {
@@ -176,9 +179,9 @@ namespace JNSoundboard
         {
             var diag = new OpenFileDialog();
 
-            diag.Multiselect = !SoundboardSettings.addingOrEditing;
+            diag.Multiselect = !frmSettings.addingOrEditing;
 
-            diag.Filter = (SoundboardSettings.addingOrEditing ? "XML file containing keys and sounds|*.xml" : "Sound files|*.wav;*.mp3");
+            diag.Filter = (frmSettings.addingOrEditing ? "XML file containing keys and sounds|*.xml" : "Sound files|*.wav;*.mp3");
 
             var result = diag.ShowDialog();
 
@@ -190,7 +193,7 @@ namespace JNSoundboard
                 {
                     string fileName = "";
 
-                    if (SoundboardSettings.addingOrEditing)
+                    if (frmSettings.addingOrEditing)
                     {
                         fileName = diag.FileNames[i];
                     }

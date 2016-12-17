@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Speech.Synthesis;
 using System.Windows.Forms;
-using static JNSoundboard.AddEditKeysLocation;
+using static JNSoundboard.frmAddEditKSs;
 
 namespace JNSoundboard
 {
-    public partial class TTS : Form
+    public partial class frmTTS : Form
     {
-        MainForm mainForm;
+        frmMain mainForm;
         SpeechSynthesizer synth;
 
-        public TTS()
+        public frmTTS()
         {
             InitializeComponent();
         }
 
         private void TTS_Load(object sender, EventArgs e)
         {
-            mainForm = Application.OpenForms[0] as MainForm;
+            mainForm = Application.OpenForms[0] as frmMain;
         }
 
         private void btnBrowseFolderLoc_Click(object sender, EventArgs e)

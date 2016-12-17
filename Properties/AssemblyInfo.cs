@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("J Soundboard")]
+[assembly: AssemblyProduct("JN Soundboard")]
 [assembly: AssemblyCopyright("Copyright © Jitnaught 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -80,39 +80,39 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddEditKeysLocation.cs">
+    <Compile Include="frmAddEditKSs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddEditKeysLocation.Designer.cs">
-      <DependentUpon>AddEditKeysLocation.cs</DependentUpon>
+    <Compile Include="frmAddEditKSs.Designer.cs">
+      <DependentUpon>frmAddEditKSs.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="XMLSettings.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundboardSettings.cs">
+    <Compile Include="frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SoundboardSettings.Designer.cs">
-      <DependentUpon>SoundboardSettings.cs</DependentUpon>
+    <Compile Include="frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="TTS.cs">
+    <Compile Include="frmTTS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TTS.Designer.cs">
-      <DependentUpon>TTS.cs</DependentUpon>
+    <Compile Include="frmTTS.Designer.cs">
+      <DependentUpon>frmTTS.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddEditKeysLocation.resx">
-      <DependentUpon>AddEditKeysLocation.cs</DependentUpon>
+    <EmbeddedResource Include="frmAddEditKSs.resx">
+      <DependentUpon>frmAddEditKSs.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -124,11 +124,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SoundboardSettings.resx">
-      <DependentUpon>SoundboardSettings.cs</DependentUpon>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TTS.resx">
-      <DependentUpon>TTS.cs</DependentUpon>
+    <EmbeddedResource Include="frmTTS.resx">
+      <DependentUpon>frmTTS.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
