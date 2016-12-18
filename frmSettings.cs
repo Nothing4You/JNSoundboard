@@ -101,7 +101,7 @@ namespace JNSoundboard
 
                     XMLSettings.minimizeToTray = cbMinimizeToTray.Checked;
 
-                    XMLSettings.WriteXML(new XMLSettings.SoundboardSettings(tbStopSoundKeys.Text, loadSettingsFileKeys.ToArray(), cbMinimizeToTray.Checked), Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml");
+                    XMLSettings.SaveSoundboardSettingsXML();
 
                     this.Close();
                 }

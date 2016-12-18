@@ -14,6 +14,7 @@ namespace JNSoundboard
         internal static Keys[] keysStopSound = null;
         internal static List<Tuple<Keys[], string>> loadXMLFileKeys = new List<Tuple<Keys[], string>>();
         internal static bool minimizeToTray = true;
+        internal static string lastPlaybackDevice = "", lastLoopbackDevice = "";
 
         //saving XML files like this makes the XML messy, but it works. if you can un-messy it, please do it and make a pull request :)
         #region Keys and sounds settings
@@ -66,14 +67,17 @@ namespace JNSoundboard
             public string StopSoundKeys;
             public LoadXMLFile[] LoadXMLFiles;
             public bool MinimizeToTray;
+            public string LastPlaybackDevice, LastLoopbackDevice;
 
             public SoundboardSettings() { }
 
-            public SoundboardSettings(string stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray)
+            public SoundboardSettings(string stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, string lastPlaybackDevice, string lastLoopbackDevice)
             {
                 StopSoundKeys = stopSoundKeys;
                 LoadXMLFiles = loadXMLFiles;
                 MinimizeToTray = minimizeToTray;
+                LastPlaybackDevice = lastPlaybackDevice;
+                LastLoopbackDevice = lastLoopbackDevice;
             }
         }
         #endregion
@@ -125,7 +129,12 @@ namespace JNSoundboard
             }
         }
 
-        internal static void LoadXML()
+        internal static void SaveSoundboardSettingsXML()
+        {
+            WriteXML(new SoundboardSettings(Helper.keysArrayToString(keysStopSound), Helper.tupleListToLoadXMLFileArr(loadXMLFileKeys), minimizeToTray, lastPlaybackDevice, lastLoopbackDevice), Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml");
+        }
+
+        internal static void LoadSoundboardSettingsXML()
         {
             string filePath = Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml";
 
@@ -158,10 +167,14 @@ namespace JNSoundboard
                 }
 
                 minimizeToTray = settings.MinimizeToTray;
+
+                lastPlaybackDevice = settings.LastPlaybackDevice;
+
+                lastLoopbackDevice = settings.LastLoopbackDevice;
             }
             else
             {
-                WriteXML(new SoundboardSettings("", new LoadXMLFile[] { new LoadXMLFile("", "") }, true), filePath);
+                WriteXML(new SoundboardSettings("", new LoadXMLFile[] { new LoadXMLFile("", "") }, true, "", ""), filePath);
                 keysStopSound = new Keys[] { };
             }
         }

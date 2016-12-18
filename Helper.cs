@@ -382,6 +382,18 @@ namespace JNSoundboard
             return temp;
         }
 
+        internal static XMLSettings.LoadXMLFile[] tupleListToLoadXMLFileArr(List<Tuple<Keys[], string>> tupleList)
+        {
+            var loadXMLFileList = new List<XMLSettings.LoadXMLFile>();
+
+            for (int i = 0; i < tupleList.Count; i++)
+            {
+                loadXMLFileList.Add(new XMLSettings.LoadXMLFile(keysArrayToString(tupleList[i].Item1), tupleList[i].Item2));
+            }
+
+            return loadXMLFileList.ToArray();
+        }
+
         internal static string cleanFileName(string fileName)
         {
             return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
