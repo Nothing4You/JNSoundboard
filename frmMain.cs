@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Media;
 using NAudio.Wave;
-using System.Threading.Tasks;
 
 namespace JNSoundboard
 {
@@ -143,6 +142,11 @@ namespace JNSoundboard
                 playbackWaveOut.Play();
             }
             catch (FormatException ex)
+            {
+                SystemSounds.Beep.Play();
+                MessageBox.Show(ex.ToString());
+            }
+            catch (System.Runtime.InteropServices.COMException ex)
             {
                 SystemSounds.Beep.Play();
                 MessageBox.Show(ex.ToString());
@@ -544,7 +548,7 @@ namespace JNSoundboard
             string deviceName = (string)cbLoopbackDevices.SelectedItem;
             XMLSettings.lastLoopbackDevice = deviceName;
 
-            Task.Run(() => XMLSettings.SaveSoundboardSettingsXML());
+            XMLSettings.SaveSoundboardSettingsXML();
         }
 
         private void cbPlaybackDevices_SelectedIndexChanged(object sender, EventArgs e)
@@ -558,7 +562,7 @@ namespace JNSoundboard
             string deviceName = (string)cbPlaybackDevices.SelectedItem;
             XMLSettings.lastPlaybackDevice = deviceName;
 
-            Task.Run(() => XMLSettings.SaveSoundboardSettingsXML());
+            XMLSettings.SaveSoundboardSettingsXML();
         }
 
         private void frmMain_Resize(object sender, EventArgs e)

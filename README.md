@@ -4,14 +4,14 @@ A program written in C# using the NAudio library that uses hotkeys to play sound
 Want to help out? Make a pull request! :)
 
 Features:
-* Can play MP3, WAV, WMA, and AIFF files
+* Can play MP3, WAV, WMA, M4A, and AC3 audio files
 * Play sounds through any sound device (speakers, virtual audio cable, etc.)
 * Microphone loopback (loops microphone sound through playback device)
 * Add, edit, remove, and clear key combinations
 * Can play a random sound out of multiple (just select multiple files when adding a hotkey)
 * Save (and load) hotkeys to XML file
-* hotkey to stop currently playing sound
-* hotkeys to load XML file containing hotkeys
+* Hotkey that stops currently playing sound
+* Hotkeys that load XML files containing hotkeys
 * Text-to-speech
 
 Requires: 

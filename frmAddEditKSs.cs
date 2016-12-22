@@ -181,7 +181,7 @@ namespace JNSoundboard
 
             diag.Multiselect = !frmSettings.addingOrEditing;
 
-            diag.Filter = (frmSettings.addingOrEditing ? "XML file containing keys and sounds|*.xml" : "Sound files|*.wav;*.mp3");
+            diag.Filter = (frmSettings.addingOrEditing ? "XML file containing keys and sounds|*.xml" : "Supported audio formats|*.mp3;*.m4a;*.wav;*.wma;*.ac3;*.aiff;*.mp2|All files|*.*");
 
             var result = diag.ShowDialog();
 
