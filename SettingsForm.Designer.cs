@@ -1,6 +1,6 @@
 ﻿namespace JNSoundboard
 {
-    partial class frmSettings
+    partial class SettingsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.label1 = new System.Windows.Forms.Label();
             this.tbStopSoundKeys = new System.Windows.Forms.TextBox();
             this.lvKeysLocs = new System.Windows.Forms.ListView();

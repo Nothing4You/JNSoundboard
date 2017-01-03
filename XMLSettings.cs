@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,10 +10,9 @@ namespace JNSoundboard
 {
     public class XMLSettings
     {
-        internal static Keys[] keysStopSound = null;
-        internal static List<Tuple<Keys[], string>> loadXMLFileKeys = new List<Tuple<Keys[], string>>();
-        internal static bool minimizeToTray = true;
-        internal static string lastPlaybackDevice = "", lastLoopbackDevice = "";
+        readonly static SoundboardSettings DEFAULT_SOUNDBOARD_SETTINGS = new SoundboardSettings(new Keys[] { }, new LoadXMLFile[] { new LoadXMLFile(new Keys[] { }, "") }, true, "", "");
+
+        internal static SoundboardSettings soundboardSettings = new SoundboardSettings();
 
         //saving XML files like this makes the XML messy, but it works. if you can un-messy it, please do it and make a pull request :)
         #region Keys and sounds settings
@@ -49,12 +47,12 @@ namespace JNSoundboard
         #region Soundboard settings
         public class LoadXMLFile
         {
-            public string Keys;
+            public Keys[] Keys;
             public string XMLLocation;
 
             public LoadXMLFile() { }
 
-            public LoadXMLFile(string keys, string xmlLocation)
+            public LoadXMLFile(Keys[] keys, string xmlLocation)
             {
                 Keys = keys;
                 XMLLocation = xmlLocation;
@@ -64,14 +62,14 @@ namespace JNSoundboard
         [Serializable]
         public class SoundboardSettings
         {
-            public string StopSoundKeys;
+            public Keys[] StopSoundKeys;
             public LoadXMLFile[] LoadXMLFiles;
             public bool MinimizeToTray;
             public string LastPlaybackDevice, LastLoopbackDevice;
 
             public SoundboardSettings() { }
 
-            public SoundboardSettings(string stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, string lastPlaybackDevice, string lastLoopbackDevice)
+            public SoundboardSettings(Keys[] stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, string lastPlaybackDevice, string lastLoopbackDevice)
             {
                 StopSoundKeys = stopSoundKeys;
                 LoadXMLFiles = loadXMLFiles;
@@ -131,7 +129,7 @@ namespace JNSoundboard
 
         internal static void SaveSoundboardSettingsXML()
         {
-            WriteXML(new SoundboardSettings(Helper.keysArrayToString(keysStopSound), Helper.tupleListToLoadXMLFileArr(loadXMLFileKeys), minimizeToTray, lastPlaybackDevice, lastLoopbackDevice), Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml");
+            WriteXML(soundboardSettings, Path.GetDirectoryName(Application.ExecutablePath) + "\\settings.xml");
         }
 
         internal static void LoadSoundboardSettingsXML()
@@ -140,42 +138,33 @@ namespace JNSoundboard
 
             if (File.Exists(filePath))
             {
-                var settings = (SoundboardSettings)ReadXML(typeof(SoundboardSettings), filePath);
+                SoundboardSettings settings;
 
-                if (settings.StopSoundKeys != null)
+                try
                 {
-                    Keys[] keysArr = null;
-                    string error = "";
-
-                    if (Helper.keysArrayFromString(settings.StopSoundKeys, out keysArr, out error))
-                        keysStopSound = keysArr;
-                    else if (error != "Key string \"\" doesn't exist")
-                        MessageBox.Show(error);
+                    settings = (SoundboardSettings)ReadXML(typeof(SoundboardSettings), filePath);
                 }
-                else keysStopSound = new Keys[] { };
-
-                if (settings.LoadXMLFiles != null && settings.LoadXMLFiles.Any(x => x.Keys != null && x.Keys.Length > 0 && !string.IsNullOrWhiteSpace(string.Join("", x.Keys)) && !string.IsNullOrWhiteSpace(x.XMLLocation) && File.Exists(x.XMLLocation)))
+                catch
                 {
-                    for (int i = 0; i < settings.LoadXMLFiles.Length; i++)
-                    {
-                        Keys[] keysArr;
-                        string error;
-
-                        if (Helper.keysArrayFromString(settings.LoadXMLFiles[i].Keys, out keysArr, out error))
-                            loadXMLFileKeys.Add(new Tuple<Keys[], string>(keysArr, settings.LoadXMLFiles[i].XMLLocation));
-                    }
+                    soundboardSettings = DEFAULT_SOUNDBOARD_SETTINGS;
+                    return;
                 }
 
-                minimizeToTray = settings.MinimizeToTray;
+                if (settings == null)
+                {
+                    soundboardSettings = DEFAULT_SOUNDBOARD_SETTINGS;
+                    return;
+                }
 
-                lastPlaybackDevice = settings.LastPlaybackDevice;
+                if (settings.StopSoundKeys == null) settings.StopSoundKeys = new Keys[] { };
 
-                lastLoopbackDevice = settings.LastLoopbackDevice;
+                if (settings.LoadXMLFiles == null) settings.LoadXMLFiles = new LoadXMLFile[] { };
+
+                soundboardSettings = settings;
             }
             else
             {
-                WriteXML(new SoundboardSettings("", new LoadXMLFile[] { new LoadXMLFile("", "") }, true, "", ""), filePath);
-                keysStopSound = new Keys[] { };
+                WriteXML(DEFAULT_SOUNDBOARD_SETTINGS, filePath);
             }
         }
     }

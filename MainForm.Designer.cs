@@ -1,6 +1,6 @@
 ﻿namespace JNSoundboard
 {
-    partial class frmMain
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.label1 = new System.Windows.Forms.Label();
             this.cbPlaybackDevices = new System.Windows.Forms.ComboBox();
             this.cbEnable = new System.Windows.Forms.CheckBox();
@@ -75,7 +75,6 @@
             this.cbPlaybackDevices.Name = "cbPlaybackDevices";
             this.cbPlaybackDevices.Size = new System.Drawing.Size(240, 21);
             this.cbPlaybackDevices.TabIndex = 10;
-            this.cbPlaybackDevices.SelectedIndexChanged += new System.EventHandler(this.cbPlaybackDevices_SelectedIndexChanged);
             // 
             // cbEnable
             // 
@@ -259,7 +258,6 @@
             this.cbLoopbackDevices.Name = "cbLoopbackDevices";
             this.cbLoopbackDevices.Size = new System.Drawing.Size(240, 21);
             this.cbLoopbackDevices.TabIndex = 11;
-            this.cbLoopbackDevices.SelectedIndexChanged += new System.EventHandler(this.cbLoopbackDevices_SelectedIndexChanged);
             // 
             // btnPlaySelectedSound
             // 
@@ -292,7 +290,7 @@
             this.notifyIcon1.Text = "JN Soundboard";
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
             // 
-            // frmMain
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -318,7 +316,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(580, 480);
-            this.Name = "frmMain";
+            this.Name = "MainForm";
             this.Text = "JN Soundboard";
             this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.menuStrip1.ResumeLayout(false);

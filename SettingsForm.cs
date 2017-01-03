@@ -6,64 +6,53 @@ using System.Windows.Forms;
 
 namespace JNSoundboard
 {
-    public partial class frmSettings : Form
+    public partial class SettingsForm : Form
     {
-        private string keysStopSound = "";
-        internal List<XMLSettings.LoadXMLFile> loadSettingsFileKeys = new List<XMLSettings.LoadXMLFile>();
+        internal List<XMLSettings.LoadXMLFile> loadXMLFilesList = new List<XMLSettings.LoadXMLFile>(XMLSettings.soundboardSettings.LoadXMLFiles); //list so can dynamically add/remove
 
-        internal static bool addingOrEditing = false;
-        internal int editIndex = -1;
-        internal string[] editKeysLoc = null;
+        internal static bool addingEditingLoadXMLFile = false;
 
-        private frmMain mainForm = null;
-
-        public frmSettings()
+        public SettingsForm()
         {
             InitializeComponent();
-
-            mainForm = Application.OpenForms[0] as frmMain;
-
-            keysStopSound = Helper.keysArrayToString(XMLSettings.keysStopSound);
-
-            for (int i = 0; i < XMLSettings.loadXMLFileKeys.Count; i++)
+                        
+            for (int i = 0; i < XMLSettings.soundboardSettings.LoadXMLFiles.Length; i++)
             {
-                loadSettingsFileKeys.Add(new XMLSettings.LoadXMLFile(Helper.keysArrayToString(XMLSettings.loadXMLFileKeys[i].Item1), XMLSettings.loadXMLFileKeys[i].Item2));
-
-                var item = new ListViewItem((loadSettingsFileKeys[i].Keys.Length > 0 ? string.Join("+", loadSettingsFileKeys[i].Keys) : ""));
-                item.SubItems.Add(((string.IsNullOrWhiteSpace(loadSettingsFileKeys[i].XMLLocation) || !File.Exists(loadSettingsFileKeys[i].XMLLocation)) ? "" : loadSettingsFileKeys[i].XMLLocation));
+                var item = new ListViewItem((XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys.Length > 0 ? string.Join("+", XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys) : ""));
+                item.SubItems.Add(((string.IsNullOrWhiteSpace(XMLSettings.soundboardSettings.LoadXMLFiles[i].XMLLocation) || !File.Exists(XMLSettings.soundboardSettings.LoadXMLFiles[i].XMLLocation)) ? "" : XMLSettings.soundboardSettings.LoadXMLFiles[i].XMLLocation));
 
                 lvKeysLocs.Items.Add(item);
             }
 
-            tbStopSoundKeys.Text = keysStopSound;
+            tbStopSoundKeys.Text = Helper.keysArrayToString(XMLSettings.soundboardSettings.StopSoundKeys);
 
-            cbMinimizeToTray.Checked = XMLSettings.minimizeToTray;
+            cbMinimizeToTray.Checked = XMLSettings.soundboardSettings.MinimizeToTray;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            addingOrEditing = true;
+            addingEditingLoadXMLFile = true;
 
-            var form = new frmAddEditKSs();
+            var form = new AddEditHotkeyForm();
             form.ShowDialog();
 
-            addingOrEditing = false;
+            addingEditingLoadXMLFile = false;
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (lvKeysLocs.SelectedIndices.Count > 0)
             {
-                addingOrEditing = true;
-                editIndex = lvKeysLocs.SelectedIndices[0];
-                editKeysLoc = new string[] { lvKeysLocs.SelectedItems[0].Text, lvKeysLocs.SelectedItems[0].SubItems[1].Text };
+                addingEditingLoadXMLFile = true;
 
-                var form = new frmAddEditKSs();
+                var form = new AddEditHotkeyForm();
+
+                form.editIndex = lvKeysLocs.SelectedIndices[0];
+                form.editSoundKeys = new string[] { lvKeysLocs.SelectedItems[0].Text, lvKeysLocs.SelectedItems[0].SubItems[1].Text };
+
                 form.ShowDialog();
 
-                editIndex = -1;
-                editKeysLoc = null;
-                addingOrEditing = false;
+                addingEditingLoadXMLFile = false;
             }
         }
 
@@ -74,7 +63,6 @@ namespace JNSoundboard
                 int index = lvKeysLocs.SelectedIndices[0];
 
                 lvKeysLocs.Items.RemoveAt(index);
-                loadSettingsFileKeys.RemoveAt(index);
             }
         }
 
@@ -85,21 +73,13 @@ namespace JNSoundboard
 
             if (string.IsNullOrWhiteSpace(tbStopSoundKeys.Text) || Helper.keysArrayFromString(tbStopSoundKeys.Text, out keysArr, out error))
             {
-                if (loadSettingsFileKeys.Count == 0 || loadSettingsFileKeys.All(x => x.Keys.Length > 0 && !string.IsNullOrWhiteSpace(x.XMLLocation) && File.Exists(x.XMLLocation)))
+                if (loadXMLFilesList.Count == 0 || loadXMLFilesList.All(x => x.Keys.Length > 0 && !string.IsNullOrWhiteSpace(x.XMLLocation) && File.Exists(x.XMLLocation)))
                 {
-                    XMLSettings.keysStopSound = (keysArr == null ? new Keys[] { } : keysArr);
+                    XMLSettings.soundboardSettings.StopSoundKeys = (keysArr == null ? new Keys[] { } : keysArr);
 
-                    XMLSettings.loadXMLFileKeys.Clear();
+                    XMLSettings.soundboardSettings.LoadXMLFiles = loadXMLFilesList.ToArray();
 
-                    for (int i = 0; i < loadSettingsFileKeys.Count; i++)
-                    {
-                        if (Helper.keysArrayFromString(loadSettingsFileKeys[i].Keys, out keysArr, out error))
-                        {
-                            XMLSettings.loadXMLFileKeys.Add(new Tuple<Keys[], string>(keysArr, loadSettingsFileKeys[i].XMLLocation));
-                        }
-                    }
-
-                    XMLSettings.minimizeToTray = cbMinimizeToTray.Checked;
+                    XMLSettings.soundboardSettings.MinimizeToTray = cbMinimizeToTray.Checked;
 
                     XMLSettings.SaveSoundboardSettingsXML();
 
