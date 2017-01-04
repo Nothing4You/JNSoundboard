@@ -25,7 +25,11 @@ Lastly, in the application that is going to use the microphone, set the micropho
 
 Screenshots: 
 
-![Main window](https://i.imgur.com/aqntN58.png)
-![Add keys window](https://i.imgur.com/JklV0mA.png)
-![Settings window](https://i.imgur.com/sSxR7Uu.png)
+![Main window](https://i.imgur.com/LOWDKYm.jpg)
+
+![Add keys window](https://i.imgur.com/tnUnLNV.jpg)
+
+![Settings window](https://i.imgur.com/C18OHVW.jpg)
+
 ![Text-to-speech window](https://i.imgur.com/EoPayHn.png)
+
