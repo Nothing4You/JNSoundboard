@@ -43,6 +43,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbMinimizeToTray = new System.Windows.Forms.CheckBox();
+            this.cbPlaySoundsOverEachOther = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,7 +82,7 @@
             this.lvKeysLocs.Location = new System.Drawing.Point(6, 19);
             this.lvKeysLocs.MultiSelect = false;
             this.lvKeysLocs.Name = "lvKeysLocs";
-            this.lvKeysLocs.Size = new System.Drawing.Size(460, 198);
+            this.lvKeysLocs.Size = new System.Drawing.Size(460, 187);
             this.lvKeysLocs.TabIndex = 1;
             this.lvKeysLocs.UseCompatibleStateImageBehavior = false;
             this.lvKeysLocs.View = System.Windows.Forms.View.Details;
@@ -100,10 +101,10 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(331, 339);
+            this.btnOK.Location = new System.Drawing.Point(331, 369);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 6;
+            this.btnOK.TabIndex = 7;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -111,7 +112,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(6, 223);
+            this.btnAdd.Location = new System.Drawing.Point(6, 212);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 2;
@@ -122,7 +123,7 @@
             // btnEdit
             // 
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEdit.Location = new System.Drawing.Point(87, 223);
+            this.btnEdit.Location = new System.Drawing.Point(87, 212);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(75, 23);
             this.btnEdit.TabIndex = 3;
@@ -133,7 +134,7 @@
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRemove.Location = new System.Drawing.Point(168, 223);
+            this.btnRemove.Location = new System.Drawing.Point(168, 212);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 4;
@@ -145,10 +146,10 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(412, 339);
+            this.btnCancel.Location = new System.Drawing.Point(412, 369);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -168,7 +169,7 @@
             this.groupBox1.Controls.Add(this.btnEdit);
             this.groupBox1.Location = new System.Drawing.Point(12, 48);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(472, 252);
+            this.groupBox1.Size = new System.Drawing.Size(472, 241);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Load XML file with keys";
@@ -177,19 +178,30 @@
             // 
             this.cbMinimizeToTray.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbMinimizeToTray.AutoSize = true;
-            this.cbMinimizeToTray.Location = new System.Drawing.Point(12, 316);
+            this.cbMinimizeToTray.Location = new System.Drawing.Point(12, 308);
             this.cbMinimizeToTray.Name = "cbMinimizeToTray";
             this.cbMinimizeToTray.Size = new System.Drawing.Size(216, 17);
             this.cbMinimizeToTray.TabIndex = 5;
             this.cbMinimizeToTray.Text = "Minimize button sends application to tray";
             this.cbMinimizeToTray.UseVisualStyleBackColor = true;
             // 
-            // frmSettings
+            // cbPlaySoundsOverEachOther
+            // 
+            this.cbPlaySoundsOverEachOther.AutoSize = true;
+            this.cbPlaySoundsOverEachOther.Location = new System.Drawing.Point(12, 335);
+            this.cbPlaySoundsOverEachOther.Name = "cbPlaySoundsOverEachOther";
+            this.cbPlaySoundsOverEachOther.Size = new System.Drawing.Size(161, 17);
+            this.cbPlaySoundsOverEachOther.TabIndex = 6;
+            this.cbPlaySoundsOverEachOther.Text = "Play sounds over each other";
+            this.cbPlaySoundsOverEachOther.UseVisualStyleBackColor = true;
+            // 
+            // SettingsForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(499, 374);
+            this.ClientSize = new System.Drawing.Size(499, 404);
+            this.Controls.Add(this.cbPlaySoundsOverEachOther);
             this.Controls.Add(this.cbMinimizeToTray);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancel);
@@ -198,7 +210,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(296, 277);
-            this.Name = "frmSettings";
+            this.Name = "SettingsForm";
             this.Text = "Soundboard Settings";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -221,5 +233,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox cbMinimizeToTray;
+        private System.Windows.Forms.CheckBox cbPlaySoundsOverEachOther;
     }
 }

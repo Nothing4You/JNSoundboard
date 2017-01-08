@@ -87,6 +87,7 @@
       <DependentUpon>AddEditHotkeyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
+    <Compile Include="Keyboard.cs" />
     <Compile Include="XMLSettings.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

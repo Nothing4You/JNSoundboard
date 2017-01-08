@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -7,15 +8,21 @@ using System.Windows.Forms;
 
 namespace JNSoundboard
 {
-    internal class Helper
+    class Helper
     {
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern short GetKeyState(ushort virtualKeyCode);
+        [DllImport("user32.dll")]
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
 
-        internal static bool IsKeyDown(Keys keyCode)
+        internal static bool isForegroundWindow(string windowTitle)
         {
-            short keyState = GetKeyState((ushort)keyCode);
-            return keyState < 0;
+            IntPtr window = FindWindow(null, windowTitle);
+
+            if (window == IntPtr.Zero) return false; //not found
+
+            return GetForegroundWindow() == window;
         }
 
         internal static string userGetXMLLoc()
@@ -47,7 +54,7 @@ namespace JNSoundboard
 
         internal static Keys[] stringArrayToKeysArray(string[] strArr)
         {
-            if (strArr == null) return new Keys[] { Keys.NoName };
+            if (strArr == null) return new Keys[] { 0 };
             var arr = new List<Keys>();
 
             for (int i = 0; i < strArr.Length; i++)
@@ -60,7 +67,7 @@ namespace JNSoundboard
                 }
                 else
                 {
-                    return new Keys[] { Keys.NoName };
+                    return new Keys[] { 0 };
                 }
             }
 
@@ -113,7 +120,7 @@ namespace JNSoundboard
             }
         }
 
-        internal static string keysArrayToString(Keys[] keysArr)
+        internal static string keysToString(params Keys[] keysArr)
         {
             if (keysArr == null) return "";
             string temp = "";

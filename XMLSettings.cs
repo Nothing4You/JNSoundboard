@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -10,7 +9,7 @@ namespace JNSoundboard
 {
     public class XMLSettings
     {
-        readonly static SoundboardSettings DEFAULT_SOUNDBOARD_SETTINGS = new SoundboardSettings(new Keys[] { }, new LoadXMLFile[] { new LoadXMLFile(new Keys[] { }, "") }, true, "", "");
+        readonly static SoundboardSettings DEFAULT_SOUNDBOARD_SETTINGS = new SoundboardSettings(new Keys[] { }, new LoadXMLFile[] { new LoadXMLFile(new Keys[] { }, "") }, true, false, "", "");
 
         internal static SoundboardSettings soundboardSettings = new SoundboardSettings();
 
@@ -64,16 +63,17 @@ namespace JNSoundboard
         {
             public Keys[] StopSoundKeys;
             public LoadXMLFile[] LoadXMLFiles;
-            public bool MinimizeToTray;
+            public bool MinimizeToTray, PlaySoundsOverEachOther;
             public string LastPlaybackDevice, LastLoopbackDevice;
 
             public SoundboardSettings() { }
 
-            public SoundboardSettings(Keys[] stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, string lastPlaybackDevice, string lastLoopbackDevice)
+            public SoundboardSettings(Keys[] stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, bool playSoundsOverEachOther, string lastPlaybackDevice, string lastLoopbackDevice)
             {
                 StopSoundKeys = stopSoundKeys;
                 LoadXMLFiles = loadXMLFiles;
                 MinimizeToTray = minimizeToTray;
+                PlaySoundsOverEachOther = playSoundsOverEachOther;
                 LastPlaybackDevice = lastPlaybackDevice;
                 LastLoopbackDevice = lastLoopbackDevice;
             }
@@ -159,6 +159,10 @@ namespace JNSoundboard
                 if (settings.StopSoundKeys == null) settings.StopSoundKeys = new Keys[] { };
 
                 if (settings.LoadXMLFiles == null) settings.LoadXMLFiles = new LoadXMLFile[] { };
+
+                if (settings.LastPlaybackDevice == null) settings.LastPlaybackDevice = "";
+
+                if (settings.LastLoopbackDevice == null) settings.LastLoopbackDevice = "";
 
                 soundboardSettings = settings;
             }

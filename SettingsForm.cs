@@ -24,9 +24,11 @@ namespace JNSoundboard
                 lvKeysLocs.Items.Add(item);
             }
 
-            tbStopSoundKeys.Text = Helper.keysArrayToString(XMLSettings.soundboardSettings.StopSoundKeys);
+            tbStopSoundKeys.Text = Helper.keysToString(XMLSettings.soundboardSettings.StopSoundKeys);
 
             cbMinimizeToTray.Checked = XMLSettings.soundboardSettings.MinimizeToTray;
+
+            cbPlaySoundsOverEachOther.Checked = XMLSettings.soundboardSettings.PlaySoundsOverEachOther;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -63,6 +65,7 @@ namespace JNSoundboard
                 int index = lvKeysLocs.SelectedIndices[0];
 
                 lvKeysLocs.Items.RemoveAt(index);
+                loadXMLFilesList.RemoveAt(index);
             }
         }
 
@@ -80,6 +83,8 @@ namespace JNSoundboard
                     XMLSettings.soundboardSettings.LoadXMLFiles = loadXMLFilesList.ToArray();
 
                     XMLSettings.soundboardSettings.MinimizeToTray = cbMinimizeToTray.Checked;
+
+                    XMLSettings.soundboardSettings.PlaySoundsOverEachOther = cbPlaySoundsOverEachOther.Checked;
 
                     XMLSettings.SaveSoundboardSettingsXML();
 
@@ -119,7 +124,7 @@ namespace JNSoundboard
         {
             int amountPressed = 0;
 
-            if (Helper.IsKeyDown(Keys.Escape) && lastAmountPressed < 2)
+            if (Keyboard.IsKeyDown(Keys.Escape))
             {
                 lastAmountPressed = 50;
 
@@ -131,7 +136,7 @@ namespace JNSoundboard
 
                 foreach (Keys key in Enum.GetValues(typeof(Keys)))
                 {
-                    if (Helper.IsKeyDown(key))
+                    if (Keyboard.IsKeyDown(key))
                     {
                         amountPressed++;
                         pressedKeys.Add(key);
@@ -140,7 +145,7 @@ namespace JNSoundboard
 
                 if (amountPressed > lastAmountPressed)
                 {
-                    tbStopSoundKeys.Text = Helper.keysArrayToString(pressedKeys.ToArray());
+                    tbStopSoundKeys.Text = Helper.keysToString(pressedKeys.ToArray());
                 }
 
                 lastAmountPressed = amountPressed;

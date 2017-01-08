@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Media;
 using NAudio.Wave;
+using System.Diagnostics;
 
 namespace JNSoundboard
 {
@@ -18,7 +19,10 @@ namespace JNSoundboard
 
         Random rand = new Random();
 
+        bool keyUpPushToTalkKey = false;
+
         internal List<XMLSettings.KeysSounds> keysSounds = new List<XMLSettings.KeysSounds>();
+        Keys pushToTalkKey;
 
         internal string xmlLoc = "";
 
@@ -26,9 +30,12 @@ namespace JNSoundboard
         {
             InitializeComponent();
 
-            new ToolTip().SetToolTip(btnReloadDevices, "Refresh sound devices");
+            var tooltip = new ToolTip();
+            tooltip.SetToolTip(btnReloadDevices, "Refresh sound devices");
+            tooltip.SetToolTip(btnReloadWindows, "Reload windows");
 
             loadSoundDevices();
+            loadWindows();
 
             XMLSettings.LoadSoundboardSettingsXML();
 
@@ -39,6 +46,23 @@ namespace JNSoundboard
             //add events after settings have been loaded
             cbPlaybackDevices.SelectedIndexChanged += cbPlaybackDevices_SelectedIndexChanged;
             cbLoopbackDevices.SelectedIndexChanged += cbLoopbackDevices_SelectedIndexChanged;
+        }
+
+        private void loadWindows()
+        {
+            cbWindows.Items.Clear();
+
+            cbWindows.Items.Add("");
+
+            Process[] processlist = Process.GetProcesses();
+
+            foreach (Process process in processlist)
+            {
+                if (!string.IsNullOrEmpty(process.MainWindowTitle))
+                {
+                    cbWindows.Items.Add(process.MainWindowTitle);
+                }
+            }
         }
 
         private void loadSoundDevices()
@@ -126,7 +150,11 @@ namespace JNSoundboard
             try
             {
                 if (playbackWaveOut != null && playbackWaveOut.PlaybackState == PlaybackState.Playing)
+                {
                     playbackWaveOut.Stop();
+                    playbackWaveOut.Dispose();
+                    playbackWaveOut = null;
+                }
             }
             catch (Exception) { }
         }
@@ -135,7 +163,7 @@ namespace JNSoundboard
         {
             int deviceNumber = cbPlaybackDevices.SelectedIndex;
 
-            stopPlayback();
+            if (!XMLSettings.soundboardSettings.PlaySoundsOverEachOther) stopPlayback();
 
             if (playbackWaveOut == null) playbackWaveOut = new WaveOut();
 
@@ -178,25 +206,24 @@ namespace JNSoundboard
                 for (int i = 0; i < s.KeysSounds.Length; i++)
                 {
                     int kLength = s.KeysSounds[i].Keys.Length;
-                    bool keysNotNull = s.KeysSounds[i].Keys.Any(x => x != 0);
+                    bool keysNull = (kLength >= 1 && !s.KeysSounds[i].Keys.Any(x => x != 0));
                     int sLength = s.KeysSounds[i].SoundLocations.Length;
                     bool soundsNotEmpty = s.KeysSounds[i].SoundLocations.All(x => !string.IsNullOrWhiteSpace(x));
                     Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
                     bool filesExist = s.KeysSounds[i].SoundLocations.All(x => File.Exists(x));
 
-                    if (kLength < 1 || !keysNotNull || sLength < 1 || !soundsNotEmpty || !filesExist) //error in XML file
+                    if (keysNull || sLength < 1 || !soundsNotEmpty || !filesExist) //error in XML file
                     {
                         string tempErr = "";
 
-                        if (kLength < 1) tempErr = "no keys are provided";
-                        else if (!keysNotNull) tempErr = "one or more keys are null/set to None";
+                        if (!keysNull) tempErr = "one or more keys are null";
                         else if (sLength < 1) tempErr = "no sounds provided";
                         else if (!filesExist) tempErr = "one or more sounds do not exist";
 
-                        errors += "Entry #" + i.ToString() + "has an error: " + tempErr;
+                        errors += "Entry #" + i.ToString() + "has an error: " + tempErr + "\r\n";
                     }
 
-                    string keys = (kLength < 1 ? "" : Helper.keysArrayToString(s.KeysSounds[i].Keys));
+                    string keys = (kLength < 1 ? "" : Helper.keysToString(s.KeysSounds[i].Keys));
 
                     if (keys != "" && items.Count > 0 && items[items.Count - 1].Text == keys && !sameKeys.Contains(keys))
                     {
@@ -219,7 +246,7 @@ namespace JNSoundboard
 
                     if (sameKeys != "")
                     {
-                        MessageBox.Show("Multiple entries using the same keys. The key(s) being used multiple times are: " + sameKeys);
+                        MessageBox.Show("Multiple entries using the same keys. The keys being used multiple times are: " + sameKeys);
                     }
 
                     keysSounds.Clear();
@@ -254,6 +281,12 @@ namespace JNSoundboard
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new SettingsForm();
+            form.ShowDialog();
+        }
+
+        private void texttospeechToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new TextToSpeechForm();
             form.ShowDialog();
         }
 
@@ -367,19 +400,13 @@ namespace JNSoundboard
             loadSoundDevices();
         }
 
-        private void btnTTS_Click(object sender, EventArgs e)
-        {
-            var form = new TextToSpeechForm();
-            form.ShowDialog();
-        }
-
         private void cbEnable_CheckedChanged(object sender, EventArgs e)
         {
             if (cbEnable.Checked)
             {
                 //enable timer if there are any keys to check. start loopback
                 if ((keysSounds != null && keysSounds.Count > 0) || (XMLSettings.soundboardSettings.LoadXMLFiles != null && XMLSettings.soundboardSettings.LoadXMLFiles.Length > 0))
-                    timer1.Enabled = true;
+                    mainTimer.Enabled = true;
                 else
                     cbEnable.Checked = false;
 
@@ -389,7 +416,7 @@ namespace JNSoundboard
             else
             {
                 //disable timer, sounds, and loopback
-                timer1.Enabled = false;
+                mainTimer.Enabled = false;
 
                 stopPlayback();
                 stopLoopback();
@@ -405,7 +432,7 @@ namespace JNSoundboard
         bool showingMsgBox = false;
         int lastIndex = -1;
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void mainTimer_Tick(object sender, EventArgs e)
         {
             if (cbEnable.Checked)
             {
@@ -421,7 +448,7 @@ namespace JNSoundboard
 
                         for (int j = 0; j < keysSounds[i].Keys.Length; j++)
                         {
-                            if (Helper.IsKeyDown(keysSounds[i].Keys[j]))
+                            if (Keyboard.IsKeyDown(keysSounds[i].Keys[j]))
                                 keysPressed++;
                         }
 
@@ -429,9 +456,17 @@ namespace JNSoundboard
                         {
                             if (keysJustPressed == keysSounds[i].Keys) continue;
 
-                            if (keysSounds[i].Keys.Length > 0 && keysSounds[i].Keys.All(x => x != 0) && keysSounds[i].SoundLocations.Length > 0 
+                            if (keysSounds[i].Keys.Length > 0 && keysSounds[i].Keys.All(x => x != 0) && keysSounds[i].SoundLocations.Length > 0
                                 && keysSounds[i].SoundLocations.Length > 0 && keysSounds[i].SoundLocations.Any(x => File.Exists(x)))
                             {
+                                if (cbEnablePushToTalk.Checked && !keyUpPushToTalkKey && !Keyboard.IsKeyDown(pushToTalkKey)
+                                    && Helper.isForegroundWindow((string)cbWindows.SelectedItem))
+                                {
+                                    keyUpPushToTalkKey = true;
+                                    bool result = Keyboard.sendKey(pushToTalkKey, true);
+                                    Thread.Sleep(100);
+                                }
+
                                 playKeySound(keysSounds[i]);
                                 return;
                             }
@@ -447,7 +482,7 @@ namespace JNSoundboard
                 {
                     for (int i = 0; i < XMLSettings.soundboardSettings.StopSoundKeys.Length; i++)
                     {
-                        if (Helper.IsKeyDown(XMLSettings.soundboardSettings.StopSoundKeys[i])) keysPressed++;
+                        if (Keyboard.IsKeyDown(XMLSettings.soundboardSettings.StopSoundKeys[i])) keysPressed++;
                     }
 
                     if (keysPressed == XMLSettings.soundboardSettings.StopSoundKeys.Length)
@@ -471,11 +506,13 @@ namespace JNSoundboard
                 {
                     for (int i = 0; i < XMLSettings.soundboardSettings.LoadXMLFiles.Length; i++)
                     {
+                        if (XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys.Length == 0) continue;
+
                         keysPressed = 0;
 
                         for (int j = 0; j < XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys.Length; j++)
                         {
-                            if (Helper.IsKeyDown(XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys[j])) keysPressed++;
+                            if (Keyboard.IsKeyDown(XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys[j])) keysPressed++;
                         }
 
                         if (keysPressed == XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys.Length)
@@ -499,6 +536,17 @@ namespace JNSoundboard
                     }
 
                     keysPressed = 0;
+                }
+
+                if (keyUpPushToTalkKey)
+                {
+                    if (!Keyboard.IsKeyDown(pushToTalkKey)) keyUpPushToTalkKey = false;
+
+                    if (playbackWaveOut.PlaybackState != PlaybackState.Playing || !Helper.isForegroundWindow((string)cbWindows.SelectedItem))
+                    {
+                        keyUpPushToTalkKey = false;
+                        Keyboard.sendKey(pushToTalkKey, false);
+                    }
                 }
             }
         }
@@ -591,6 +639,67 @@ namespace JNSoundboard
             this.WindowState = FormWindowState.Minimized;
             this.Show();
             this.WindowState = FormWindowState.Normal;
+        }
+
+        private void tbPushToTalkKey_Enter(object sender, EventArgs e)
+        {
+            if (!cbEnablePushToTalk.Checked)
+            {
+                cbEnable.Checked = false;
+                pushToTalkKeyTimer.Enabled = true;
+            }
+        }
+
+        private void tbPushToTalkKey_Leave(object sender, EventArgs e)
+        {
+            pushToTalkKeyTimer.Enabled = false;
+        }
+
+        private void pushToTalkKeyTimer_Tick(object sender, EventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Keys.Escape))
+            {
+                tbPushToTalkKey.Text = "";
+                pushToTalkKey = default(Keys);
+            }
+            else
+            {
+                foreach (Keys key in Enum.GetValues(typeof(Keys)))
+                {
+                    if (Keyboard.IsKeyDown(key))
+                    {
+                        tbPushToTalkKey.Text = Helper.keysToString(key);
+                        pushToTalkKey = key;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void cbEnablePushToTalk_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbEnablePushToTalk.Checked)
+            {
+                if (tbPushToTalkKey.Text == "" || (string)cbWindows.SelectedItem == "")
+                {
+                    cbEnablePushToTalk.Checked = false;
+                    MessageBox.Show("There is either no push to talk key entered, or no window selected");
+                    return;
+                }
+
+                cbWindows.Enabled = false;
+            }
+            else cbWindows.Enabled = true;
+        }
+
+        private void btnReloadWindows_Click(object sender, EventArgs e)
+        {
+            loadWindows();
+        }
+
+        private void cbWindows_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbEnable.Checked = false;
         }
     }
 }

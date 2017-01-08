@@ -157,7 +157,7 @@ namespace JNSoundboard
                     if (x.Keys == null && y.Keys == null) return 0;
                     else if (x.Keys == null) return -1;
                     else if (y.Keys == null) return 1;
-                    else return Helper.keysArrayToString(x.Keys).CompareTo(Helper.keysArrayToString(y.Keys));
+                    else return Helper.keysToString(x.Keys).CompareTo(Helper.keysToString(y.Keys));
                 });
 
                 mainForm.chKeys.Width = -2;
@@ -212,23 +212,33 @@ namespace JNSoundboard
         private void timer1_Tick(object sender, EventArgs e)
         {
             int amountPressed = 0;
-            var pressedKeys = new List<Keys>();
 
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+            if (Keyboard.IsKeyDown(Keys.Escape))
             {
-                if (Helper.IsKeyDown(key))
+                lastAmountPressed = 50;
+
+                tbKeys.Text = ""; 
+            }
+            else
+            {
+                var pressedKeys = new List<Keys>();
+
+                foreach (Keys key in Enum.GetValues(typeof(Keys)))
                 {
-                    amountPressed++;
-                    pressedKeys.Add(key);
+                    if (Keyboard.IsKeyDown(key))
+                    {
+                        amountPressed++;
+                        pressedKeys.Add(key);
+                    }
                 }
-            }
 
-            if (amountPressed > lastAmountPressed)
-            {
-                tbKeys.Text = Helper.keysArrayToString(pressedKeys.ToArray());
-            }
+                if (amountPressed > lastAmountPressed)
+                {
+                    tbKeys.Text = Helper.keysToString(pressedKeys.ToArray());
+                }
 
-            lastAmountPressed = amountPressed;
+                lastAmountPressed = amountPressed;
+            }
         }
     }
 }
