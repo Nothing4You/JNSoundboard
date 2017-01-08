@@ -112,14 +112,16 @@ namespace JNSoundboard
             loopbackSourceStream.DeviceNumber = deviceNumber;
             loopbackSourceStream.WaveFormat = new WaveFormat(44100, WaveIn.GetCapabilities(deviceNumber).Channels);
             loopbackSourceStream.BufferMilliseconds = 25;
+            loopbackSourceStream.NumberOfBuffers = 5;
             loopbackSourceStream.DataAvailable += loopbackSourceStream_DataAvailable;
 
             loopbackWaveProvider = new BufferedWaveProvider(loopbackSourceStream.WaveFormat);
+            loopbackWaveProvider.DiscardOnBufferOverflow = true;
 
             if (loopbackWaveOut == null)
                 loopbackWaveOut = new WaveOut();
             loopbackWaveOut.DeviceNumber = cbPlaybackDevices.SelectedIndex;
-            loopbackWaveOut.DesiredLatency = 100;
+            loopbackWaveOut.DesiredLatency = 125;
             loopbackWaveOut.Init(loopbackWaveProvider);
 
             loopbackSourceStream.StartRecording();
@@ -131,7 +133,11 @@ namespace JNSoundboard
             try
             {
                 if (loopbackWaveOut != null)
+                {
                     loopbackWaveOut.Stop();
+                    loopbackWaveOut.Dispose();
+                    loopbackWaveOut = null;
+                }
 
                 if (loopbackWaveProvider != null)
                 {
@@ -140,7 +146,11 @@ namespace JNSoundboard
                 }
 
                 if (loopbackSourceStream != null)
+                {
                     loopbackSourceStream.StopRecording();
+                    loopbackSourceStream.Dispose();
+                    loopbackSourceStream = null;
+                }
             }
             catch (Exception) { }
         }
@@ -275,7 +285,8 @@ namespace JNSoundboard
 
         private void loopbackSourceStream_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (loopbackWaveProvider != null) loopbackWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+            if (loopbackWaveProvider != null && loopbackWaveProvider.BufferedDuration.TotalMilliseconds <= 100)
+                loopbackWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -596,7 +607,10 @@ namespace JNSoundboard
             if (cbLoopbackDevices.SelectedIndex > 0)
             {
                 if (cbEnable.Checked) //start loopback on new device, or stop loopback
-                    startLoopback();
+                {
+                    if ((string)cbLoopbackDevices.SelectedItem == "") stopLoopback();
+                    else startLoopback();
+                }
                 else
                     stopLoopback();
             }
@@ -701,5 +715,7 @@ namespace JNSoundboard
         {
             cbEnable.Checked = false;
         }
+
+        
     }
 }
