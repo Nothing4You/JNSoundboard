@@ -7,11 +7,13 @@ Features:
 * Can play MP3, WAV, WMA, M4A, and AC3 audio files
 * Play sounds through any sound device (speakers, virtual audio cable, etc.)
 * Microphone loopback (loops microphone sound through playback device)
-* Add, edit, remove, and clear key combinations
+* Add, edit, remove, and clear hotkeys
 * Can play a random sound out of multiple (just select multiple files when adding a hotkey)
+* Restrict hotkey so that the hotkey is only played when a certain window is in the foreground
 * Save (and load) hotkeys to XML file
 * Hotkey that stops currently playing sound
 * Hotkeys that load XML files containing hotkeys
+* Auto press push-to-talk key when playing sound
 * Text-to-speech
 
 Requires: 
@@ -25,9 +27,9 @@ Lastly, in the application that is going to use the microphone, set the micropho
 
 Screenshots: 
 
-![Main window](https://i.imgur.com/qFWhGF2.jpg)
+![Main window](https://i.imgur.com/7mGHN9g.jpg)
 
-![Add keys window](https://i.imgur.com/tnUnLNV.jpg)
+![Add hokey window](https://i.imgur.com/pgKoli1.jpg)
 
 ![Settings window](https://i.imgur.com/yYsm1TR.jpg)
 
