@@ -171,6 +171,7 @@ namespace JNSoundboard
             else
             {
                 WriteXML(DEFAULT_SOUNDBOARD_SETTINGS, filePath);
+                soundboardSettings = DEFAULT_SOUNDBOARD_SETTINGS;
             }
         }
     }
