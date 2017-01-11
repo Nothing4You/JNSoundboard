@@ -50,7 +50,7 @@ namespace JNSoundboard
                 var form = new AddEditHotkeyForm();
 
                 form.editIndex = lvKeysLocs.SelectedIndices[0];
-                form.editSoundKeys = new string[] { lvKeysLocs.SelectedItems[0].Text, lvKeysLocs.SelectedItems[0].SubItems[1].Text };
+                form.editStrings = new string[] { lvKeysLocs.SelectedItems[0].Text, lvKeysLocs.SelectedItems[0].SubItems[1].Text };
 
                 form.ShowDialog();
 

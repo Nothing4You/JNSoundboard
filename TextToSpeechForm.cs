@@ -68,10 +68,10 @@ namespace JNSoundboard
                 {
                     if (convertedKeys.Length > 0)
                     {
-                        var newKS = new XMLSettings.KeysSounds(convertedKeys, new string[] { tbWhereSave.Text + "\\" + Helper.cleanFileName(tbText.Text.Replace(" ", "") + ".wav") });
+                        var newSH = new XMLSettings.SoundHotkey(convertedKeys, "", new string[] { tbWhereSave.Text + "\\" + Helper.cleanFileName(tbText.Text.Replace(" ", "") + ".wav") });
 
                         synth = new SpeechSynthesizer();
-                        synth.SetOutputToWaveFile(newKS.SoundLocations[0]);
+                        synth.SetOutputToWaveFile(newSH.SoundLocations[0]);
 
                         PromptBuilder builder = new PromptBuilder();
                         builder.AppendText(tbText.Text);
@@ -81,17 +81,17 @@ namespace JNSoundboard
                         synth.Dispose();
                         synth = null;
 
-                        mainForm.keysSounds.Add(newKS);
+                        mainForm.soundHotkeys.Add(newSH);
 
                         var newItem = new ListViewItem(tbKeys.Text);
-                        newItem.SubItems.Add(newKS.SoundLocations[0]);
+                        newItem.SubItems.Add(newSH.SoundLocations[0]);
 
                         mainForm.lvKeySounds.Items.Add(newItem);
 
                         mainForm.lvKeySounds.ListViewItemSorter = new ListViewItemComparer(0);
                         mainForm.lvKeySounds.Sort();
 
-                        mainForm.keysSounds.Sort(delegate (XMLSettings.KeysSounds x, XMLSettings.KeysSounds y)
+                        mainForm.soundHotkeys.Sort(delegate (XMLSettings.SoundHotkey x, XMLSettings.SoundHotkey y)
                         {
                             if (x.Keys == null && y.Keys == null) return 0;
                             else if (x.Keys == null) return -1;
@@ -99,7 +99,7 @@ namespace JNSoundboard
                             else return Helper.keysToString(x.Keys).CompareTo(Helper.keysToString(y.Keys));
                         });
 
-                        MessageBox.Show("File saved to " + newKS.SoundLocations[0]);
+                        MessageBox.Show("File saved to " + newSH.SoundLocations[0]);
                     }
                 }
                 else

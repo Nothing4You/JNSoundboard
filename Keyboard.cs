@@ -102,7 +102,7 @@ namespace JNSoundboard
                 }
             };
 
-            return SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT))) >= 1;
+            return SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT))) > 0;
         }
     }
 }

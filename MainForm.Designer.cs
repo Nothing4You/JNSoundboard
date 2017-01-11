@@ -40,6 +40,7 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.lvKeySounds = new System.Windows.Forms.ListView();
             this.chKeys = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chWindow = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chSoundLoc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnReloadDevices = new System.Windows.Forms.Button();
@@ -62,6 +63,7 @@
             this.tbPushToTalkKey = new System.Windows.Forms.TextBox();
             this.cbAudioDevices = new System.Windows.Forms.GroupBox();
             this.pushToTalkKeyTimer = new System.Windows.Forms.Timer(this.components);
+            this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.gbPushToTalk.SuspendLayout();
             this.cbAudioDevices.SuspendLayout();
@@ -156,6 +158,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvKeySounds.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chKeys,
+            this.chWindow,
             this.chSoundLoc});
             this.lvKeySounds.FullRowSelect = true;
             this.lvKeySounds.GridLines = true;
@@ -172,6 +175,10 @@
             // 
             this.chKeys.Text = "Keys";
             this.chKeys.Width = 150;
+            // 
+            // chWindow
+            // 
+            this.chWindow.Text = "Window";
             // 
             // chSoundLoc
             // 
@@ -226,7 +233,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
-            this.texttospeechToolStripMenuItem});
+            this.texttospeechToolStripMenuItem,
+            this.checkForUpdateToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(638, 24);
@@ -394,6 +402,13 @@
             // 
             this.pushToTalkKeyTimer.Tick += new System.EventHandler(this.pushToTalkKeyTimer_Tick);
             // 
+            // checkForUpdateToolStripMenuItem
+            // 
+            this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
+            this.checkForUpdateToolStripMenuItem.Text = "Check for update";
+            this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -464,6 +479,8 @@
         private System.Windows.Forms.ToolStripMenuItem texttospeechToolStripMenuItem;
         private System.Windows.Forms.Button btnReloadWindows;
         private System.Windows.Forms.Timer pushToTalkKeyTimer;
+        internal System.Windows.Forms.ColumnHeader chWindow;
+        private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
     }
 }
 

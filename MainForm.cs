@@ -21,7 +21,7 @@ namespace JNSoundboard
 
         bool keyUpPushToTalkKey = false;
 
-        internal List<XMLSettings.KeysSounds> keysSounds = new List<XMLSettings.KeysSounds>();
+        internal List<XMLSettings.SoundHotkey> soundHotkeys = new List<XMLSettings.SoundHotkey>();
         Keys pushToTalkKey;
 
         internal string xmlLoc = "";
@@ -207,20 +207,20 @@ namespace JNSoundboard
         {
             XMLSettings.Settings s = (XMLSettings.Settings)XMLSettings.ReadXML(typeof(XMLSettings.Settings), path);
 
-            if (s != null && s.KeysSounds != null && s.KeysSounds.Length > 0)
+            if (s != null && s.SoundHotkeys != null && s.SoundHotkeys.Length > 0)
             {
                 var items = new List<ListViewItem>();
                 string errors = "";
                 string sameKeys = "";
 
-                for (int i = 0; i < s.KeysSounds.Length; i++)
+                for (int i = 0; i < s.SoundHotkeys.Length; i++)
                 {
-                    int kLength = s.KeysSounds[i].Keys.Length;
-                    bool keysNull = (kLength >= 1 && !s.KeysSounds[i].Keys.Any(x => x != 0));
-                    int sLength = s.KeysSounds[i].SoundLocations.Length;
-                    bool soundsNotEmpty = s.KeysSounds[i].SoundLocations.All(x => !string.IsNullOrWhiteSpace(x));
+                    int kLength = s.SoundHotkeys[i].Keys.Length;
+                    bool keysNull = (kLength > 0 && !s.SoundHotkeys[i].Keys.Any(x => x != 0));
+                    int sLength = s.SoundHotkeys[i].SoundLocations.Length;
+                    bool soundsNotEmpty = s.SoundHotkeys[i].SoundLocations.All(x => !string.IsNullOrWhiteSpace(x));
                     Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
-                    bool filesExist = s.KeysSounds[i].SoundLocations.All(x => File.Exists(x));
+                    bool filesExist = s.SoundHotkeys[i].SoundLocations.All(x => File.Exists(x));
 
                     if (keysNull || sLength < 1 || !soundsNotEmpty || !filesExist) //error in XML file
                     {
@@ -233,15 +233,19 @@ namespace JNSoundboard
                         errors += "Entry #" + i.ToString() + "has an error: " + tempErr + "\r\n";
                     }
 
-                    string keys = (kLength < 1 ? "" : Helper.keysToString(s.KeysSounds[i].Keys));
+                    string keys = (kLength < 1 ? "" : Helper.keysToString(s.SoundHotkeys[i].Keys));
 
                     if (keys != "" && items.Count > 0 && items[items.Count - 1].Text == keys && !sameKeys.Contains(keys))
                     {
                         sameKeys += (sameKeys != "" ? ", " : "") + keys;
                     }
 
+                    string windowText = "";
+                    if (!string.IsNullOrWhiteSpace(s.SoundHotkeys[i].WindowTitle)) windowText = s.SoundHotkeys[i].WindowTitle;
+
                     var temp = new ListViewItem(keys);
-                    temp.SubItems.Add((sLength < 1 ? "" : Helper.soundLocsArrayToString(s.KeysSounds[i].SoundLocations)));
+                    temp.SubItems.Add(windowText);
+                    temp.SubItems.Add((sLength < 1 ? "" : Helper.soundLocsArrayToString(s.SoundHotkeys[i].SoundLocations)));
 
                     items.Add(temp); //add even if there was an error, so that the user can fix within the app
                 }
@@ -259,8 +263,8 @@ namespace JNSoundboard
                         MessageBox.Show("Multiple entries using the same keys. The keys being used multiple times are: " + sameKeys);
                     }
 
-                    keysSounds.Clear();
-                    keysSounds.AddRange(s.KeysSounds);
+                    soundHotkeys.Clear();
+                    soundHotkeys.AddRange(s.SoundHotkeys);
 
                     lvKeySounds.Items.Clear();
                     lvKeySounds.Items.AddRange(items.ToArray());
@@ -283,6 +287,25 @@ namespace JNSoundboard
             }
         }
 
+        private void editSelectedSoundHotkey()
+        {
+            if (lvKeySounds.SelectedItems.Count > 0)
+            {
+                var form = new AddEditHotkeyForm();
+
+                ListViewItem item = lvKeySounds.SelectedItems[0];
+
+                form.editStrings = new string[3];
+                form.editStrings[0] = item.Text;
+                form.editStrings[1] = item.SubItems[1].Text;
+                form.editStrings[2] = item.SubItems[2].Text;
+
+                form.editIndex = lvKeySounds.SelectedIndices[0];
+
+                form.ShowDialog();
+            }
+        }
+
         private void loopbackSourceStream_DataAvailable(object sender, WaveInEventArgs e)
         {
             if (loopbackWaveProvider != null && loopbackWaveProvider.BufferedDuration.TotalMilliseconds <= 100)
@@ -301,6 +324,11 @@ namespace JNSoundboard
             form.ShowDialog();
         }
 
+        private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Jitnaught/JNSoundboard/releases");
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             var form = new AddEditHotkeyForm();
@@ -309,27 +337,14 @@ namespace JNSoundboard
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (lvKeySounds.SelectedItems.Count > 0)
-            {
-                var form = new AddEditHotkeyForm();
-
-                ListViewItem item = lvKeySounds.SelectedItems[0];
-
-                form.editSoundKeys = new string[2];
-                form.editSoundKeys[0] = item.Text;
-                form.editSoundKeys[1] = item.SubItems[1].Text;
-
-                form.editIndex = lvKeySounds.SelectedIndices[0];
-
-                form.ShowDialog();
-            }
+            editSelectedSoundHotkey();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
             if (lvKeySounds.SelectedItems.Count > 0 && MessageBox.Show("Are you sure remove that item?", "Remove", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                keysSounds.RemoveAt(lvKeySounds.SelectedIndices[0]);
+                soundHotkeys.RemoveAt(lvKeySounds.SelectedIndices[0]);
                 lvKeySounds.Items.Remove(lvKeySounds.SelectedItems[0]);
 
                 if (lvKeySounds.Items.Count == 0) cbEnable.Checked = false;
@@ -340,7 +355,7 @@ namespace JNSoundboard
         {
             if (MessageBox.Show("Are you sure you want to clear all items?", "Clear", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                keysSounds.Clear();
+                soundHotkeys.Clear();
                 lvKeySounds.Items.Clear();
 
                 cbEnable.Checked = false;
@@ -350,7 +365,7 @@ namespace JNSoundboard
         private void btnPlaySound_Click(object sender, EventArgs e)
         {
             if (lvKeySounds.SelectedItems.Count > 0)
-                playKeySound(keysSounds[lvKeySounds.SelectedIndices[0]]);
+                playKeySound(soundHotkeys[lvKeySounds.SelectedIndices[0]]);
         }
 
         private void btnStopAllSounds_Click(object sender, EventArgs e)
@@ -381,7 +396,7 @@ namespace JNSoundboard
 
             if (xmlLoc != "")
             {
-                XMLSettings.WriteXML(new XMLSettings.Settings() { KeysSounds = keysSounds.ToArray() }, xmlLoc);
+                XMLSettings.WriteXML(new XMLSettings.Settings() { SoundHotkeys = soundHotkeys.ToArray() }, xmlLoc);
 
                 MessageBox.Show("Saved");
             }
@@ -397,7 +412,7 @@ namespace JNSoundboard
                 xmlLoc = last;
             else if (last != xmlLoc)
             {
-                XMLSettings.WriteXML(new XMLSettings.Settings() { KeysSounds = keysSounds.ToArray() }, xmlLoc);
+                XMLSettings.WriteXML(new XMLSettings.Settings() { SoundHotkeys = soundHotkeys.ToArray() }, xmlLoc);
 
                 MessageBox.Show("Saved");
             }
@@ -416,7 +431,7 @@ namespace JNSoundboard
             if (cbEnable.Checked)
             {
                 //enable timer if there are any keys to check. start loopback
-                if ((keysSounds != null && keysSounds.Count > 0) || (XMLSettings.soundboardSettings.LoadXMLFiles != null && XMLSettings.soundboardSettings.LoadXMLFiles.Length > 0))
+                if ((soundHotkeys != null && soundHotkeys.Count > 0) || (XMLSettings.soundboardSettings.LoadXMLFiles != null && XMLSettings.soundboardSettings.LoadXMLFiles.Length > 0))
                     mainTimer.Enabled = true;
                 else
                     cbEnable.Checked = false;
@@ -436,7 +451,7 @@ namespace JNSoundboard
 
         private void lvKeySounds_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            btnEdit_Click(null, null); //open edit form
+            editSelectedSoundHotkey();
         }
 
         Keys[] keysJustPressed = null;
@@ -449,26 +464,30 @@ namespace JNSoundboard
             {
                 int keysPressed = 0;
 
-                if (keysSounds.Count > 0) //check that required keys are pressed to play sound
+                if (soundHotkeys.Count > 0) //check that required keys are pressed to play sound
                 {
-                    for (int i = 0; i < keysSounds.Count; i++)
+                    IntPtr foregroundWindow = Helper.GetForegroundWindow();
+
+                    for (int i = 0; i < soundHotkeys.Count; i++)
                     {
                         keysPressed = 0;
 
-                        if (keysSounds[i].Keys.Length == 0) continue;
+                        if (soundHotkeys[i].Keys.Length == 0) continue;
 
-                        for (int j = 0; j < keysSounds[i].Keys.Length; j++)
+                        if (soundHotkeys[i].WindowTitle != "" && !Helper.isForegroundWindow(foregroundWindow, soundHotkeys[i].WindowTitle)) continue;
+
+                        for (int j = 0; j < soundHotkeys[i].Keys.Length; j++)
                         {
-                            if (Keyboard.IsKeyDown(keysSounds[i].Keys[j]))
+                            if (Keyboard.IsKeyDown(soundHotkeys[i].Keys[j]))
                                 keysPressed++;
                         }
 
-                        if (keysPressed == keysSounds[i].Keys.Length)
+                        if (keysPressed == soundHotkeys[i].Keys.Length)
                         {
-                            if (keysJustPressed == keysSounds[i].Keys) continue;
+                            if (keysJustPressed == soundHotkeys[i].Keys) continue;
 
-                            if (keysSounds[i].Keys.Length > 0 && keysSounds[i].Keys.All(x => x != 0) && keysSounds[i].SoundLocations.Length > 0
-                                && keysSounds[i].SoundLocations.Length > 0 && keysSounds[i].SoundLocations.Any(x => File.Exists(x)))
+                            if (soundHotkeys[i].Keys.Length > 0 && soundHotkeys[i].Keys.All(x => x != 0) && soundHotkeys[i].SoundLocations.Length > 0
+                                && soundHotkeys[i].SoundLocations.Length > 0 && soundHotkeys[i].SoundLocations.Any(x => File.Exists(x)))
                             {
                                 if (cbEnablePushToTalk.Checked && !keyUpPushToTalkKey && !Keyboard.IsKeyDown(pushToTalkKey)
                                     && Helper.isForegroundWindow((string)cbWindows.SelectedItem))
@@ -478,11 +497,11 @@ namespace JNSoundboard
                                     Thread.Sleep(100);
                                 }
 
-                                playKeySound(keysSounds[i]);
+                                playKeySound(soundHotkeys[i]);
                                 return;
                             }
                         }
-                        else if (keysJustPressed == keysSounds[i].Keys)
+                        else if (keysJustPressed == soundHotkeys[i].Keys)
                             keysJustPressed = null;
                     }
 
@@ -562,7 +581,7 @@ namespace JNSoundboard
             }
         }
 
-        private void playKeySound(XMLSettings.KeysSounds currentKeysSounds)
+        private void playKeySound(XMLSettings.SoundHotkey currentKeysSounds)
         {
             Environment.CurrentDirectory = Path.GetDirectoryName(Application.ExecutablePath);
 
@@ -715,7 +734,5 @@ namespace JNSoundboard
         {
             cbEnable.Checked = false;
         }
-
-        
     }
 }

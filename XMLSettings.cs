@@ -13,18 +13,20 @@ namespace JNSoundboard
 
         internal static SoundboardSettings soundboardSettings = new SoundboardSettings();
 
-        //saving XML files like this makes the XML messy, but it works. if you can un-messy it, please do it and make a pull request :)
+        //saving XML files like this makes the XML messy, but it works
         #region Keys and sounds settings
-        public class KeysSounds
+        public class SoundHotkey
         {
             public Keys[] Keys;
+            public string WindowTitle;
             public string[] SoundLocations;
 
-            public KeysSounds() { }
+            public SoundHotkey() { }
 
-            public KeysSounds(Keys[] keys, string[] soundLocs)
+            public SoundHotkey(Keys[] keys, string windowTitle, string[] soundLocs)
             {
                 Keys = keys;
+                WindowTitle = windowTitle;
                 SoundLocations = soundLocs;
             }
         }
@@ -32,13 +34,13 @@ namespace JNSoundboard
         [Serializable]
         public class Settings
         {
-            public KeysSounds[] KeysSounds;
+            public SoundHotkey[] SoundHotkeys;
 
             public Settings() { }
 
-            public Settings(KeysSounds[] ks)
+            public Settings(SoundHotkey[] sh)
             {
-                KeysSounds = ks;
+                SoundHotkeys = sh;
             }
         }
         #endregion

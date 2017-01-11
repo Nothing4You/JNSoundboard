@@ -14,15 +14,22 @@ namespace JNSoundboard
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         
         [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
+        internal static extern IntPtr GetForegroundWindow();
 
         internal static bool isForegroundWindow(string windowTitle)
+        {
+            IntPtr foregroundWindow = GetForegroundWindow();
+
+            return isForegroundWindow(foregroundWindow, windowTitle);
+        }
+
+        internal static bool isForegroundWindow(IntPtr foregroundWindow, string windowTitle)
         {
             IntPtr window = FindWindow(null, windowTitle);
 
             if (window == IntPtr.Zero) return false; //not found
 
-            return GetForegroundWindow() == window;
+            return foregroundWindow == window;
         }
 
         internal static string userGetXMLLoc()
