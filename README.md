@@ -1,8 +1,6 @@
 # JN Soundboard
 A program written in C# using the NAudio library that uses hotkeys to play sounds into a chosen sound device. It is similar to [EXP Soundboard](https://sourceforge.net/projects/expsoundboard/), except that JN Soundboard is not as cross-platform as EXP, but, there are more features in JN than EXP.
 
-Want to help out? Make a pull request! :)
-
 Features:
 * Can play MP3, WAV, WMA, M4A, and AC3 audio files
 * Play sounds through any sound device (speakers, virtual audio cable, etc.)
