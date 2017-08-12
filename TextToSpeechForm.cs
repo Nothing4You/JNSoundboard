@@ -84,6 +84,7 @@ namespace JNSoundboard
                         mainForm.soundHotkeys.Add(newSH);
 
                         var newItem = new ListViewItem(tbKeys.Text);
+                        newItem.SubItems.Add(""); //window title
                         newItem.SubItems.Add(newSH.SoundLocations[0]);
 
                         mainForm.lvKeySounds.Items.Add(newItem);
