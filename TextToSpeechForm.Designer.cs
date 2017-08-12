@@ -65,7 +65,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnClose.Location = new System.Drawing.Point(171, 208);
+            this.btnClose.Location = new System.Drawing.Point(170, 201);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 5;
@@ -151,11 +151,11 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // TTS
+            // TextToSpeechForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(414, 239);
+            this.ClientSize = new System.Drawing.Size(414, 231);
             this.Controls.Add(this.btnCreateWAVAdd);
             this.Controls.Add(this.btnCreateWAV);
             this.Controls.Add(this.btnBrowseFolderLoc);
@@ -170,7 +170,7 @@
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(4000, 270);
             this.MinimumSize = new System.Drawing.Size(422, 270);
-            this.Name = "TTS";
+            this.Name = "TextToSpeechForm";
             this.Text = "TTS";
             this.Load += new System.EventHandler(this.TTS_Load);
             this.ResumeLayout(false);

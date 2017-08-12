@@ -16,10 +16,20 @@ namespace JNSoundboard
         {
             InitializeComponent();
                         
-            for (int i = 0; i < XMLSettings.soundboardSettings.LoadXMLFiles.Length; i++)
+            for (int i = 0; i < loadXMLFilesList.Count; i++)
             {
-                var item = new ListViewItem((XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys.Length > 0 ? string.Join("+", XMLSettings.soundboardSettings.LoadXMLFiles[i].Keys) : ""));
-                item.SubItems.Add(((string.IsNullOrWhiteSpace(XMLSettings.soundboardSettings.LoadXMLFiles[i].XMLLocation) || !File.Exists(XMLSettings.soundboardSettings.LoadXMLFiles[i].XMLLocation)) ? "" : XMLSettings.soundboardSettings.LoadXMLFiles[i].XMLLocation));
+                bool keysLengthCorrect = loadXMLFilesList[i].Keys.Length > 0;
+                bool xmlLocationUnempty = !string.IsNullOrWhiteSpace(loadXMLFilesList[i].XMLLocation);
+
+                if (!keysLengthCorrect && !xmlLocationUnempty) //remove if empty
+                {
+                    loadXMLFilesList.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
+                var item = new ListViewItem((keysLengthCorrect ? string.Join("+", loadXMLFilesList[i].Keys) : ""));
+                item.SubItems.Add((xmlLocationUnempty ? loadXMLFilesList[i].XMLLocation : ""));
 
                 lvKeysLocs.Items.Add(item);
             }
@@ -68,7 +78,7 @@ namespace JNSoundboard
                 loadXMLFilesList.RemoveAt(index);
             }
         }
-
+        
         private void btnOK_Click(object sender, EventArgs e)
         {
             Keys[] keysArr = null;

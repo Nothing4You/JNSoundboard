@@ -226,11 +226,12 @@ namespace JNSoundboard
                     {
                         string tempErr = "";
 
-                        if (!keysNull) tempErr = "one or more keys are null";
-                        else if (sLength < 1) tempErr = "no sounds provided";
+                        if (kLength == 0 && (sLength == 0 || !soundsNotEmpty)) tempErr = "entry is empty";
+                        else if (!keysNull) tempErr = "one or more keys are null";
+                        else if (sLength == 0) tempErr = "no sounds provided";
                         else if (!filesExist) tempErr = "one or more sounds do not exist";
 
-                        errors += "Entry #" + i.ToString() + "has an error: " + tempErr + "\r\n";
+                        errors += "Entry #" + (i + 1).ToString() + " has an error: " + tempErr + "\r\n";
                     }
 
                     string keys = (kLength < 1 ? "" : Helper.keysToString(s.SoundHotkeys[i].Keys));
@@ -249,8 +250,7 @@ namespace JNSoundboard
 
                     items.Add(temp); //add even if there was an error, so that the user can fix within the app
                 }
-
-
+                
                 if (items.Count > 0)
                 {
                     if (errors != "")
