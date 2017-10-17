@@ -85,6 +85,9 @@
     <Compile Include="AddEditHotkeyForm.Designer.cs">
       <DependentUpon>AddEditHotkeyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AudioPlaybackEngine.cs" />
+    <Compile Include="CachedSound.cs" />
+    <Compile Include="CachedSoundSampleProvider.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="XMLSettings.cs" />

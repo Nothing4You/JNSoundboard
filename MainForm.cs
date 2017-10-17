@@ -181,9 +181,9 @@ namespace JNSoundboard
 
             try
             {
-                playbackWaveOut.Init(new AudioFileReader(file));
-
-                playbackWaveOut.Play();
+                AudioPlaybackEngine.Instance.PlaySound(file);
+                //playbackWaveOut.Init(new AudioFileReader(file));
+                //playbackWaveOut.Play();
             }
             catch (FormatException ex)
             {
