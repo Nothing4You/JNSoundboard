@@ -47,6 +47,17 @@ namespace JNSoundboard
             cbLoopbackDevices.SelectedIndexChanged += cbLoopbackDevices_SelectedIndexChanged;
 
             initAudioPlaybackEngine();
+
+            AudioPlaybackEngine.Instance.AllInputEnded += OnAllInputEnded;
+        }
+
+        private void OnAllInputEnded(object sender, EventArgs e)
+        {
+            if (keyUpPushToTalkKey)
+            {
+                keyUpPushToTalkKey = false;
+                Keyboard.sendKey(pushToTalkKey, false);
+            }
         }
 
         private void initAudioPlaybackEngine()

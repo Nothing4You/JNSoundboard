@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using System.Linq;
 
 namespace JNSoundboard
 {
@@ -15,6 +16,19 @@ namespace JNSoundboard
         {
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount));
             mixer.ReadFully = true;
+            mixer.MixerInputEnded += OnMixerInputEnded;
+        }
+
+        public event EventHandler AllInputEnded;
+
+        private void OnMixerInputEnded(object sender, SampleProviderEventArgs e)
+        {
+            // check if there are any inputs left
+            // OnMixerInputEnded gets invoked before the corresponding source is removed from the List so there should be exactly one source left
+            if (mixer.MixerInputs.Count() == 1)
+            {
+                AllInputEnded?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public void Init(int deviceNumber)
