@@ -7,17 +7,26 @@ namespace JNSoundboard
 {
     class AudioPlaybackEngine : IDisposable
     {
-        private readonly IWavePlayer outputDevice;
+        private IWavePlayer outputDevice;
         private readonly MixingSampleProvider mixer;
         private IDictionary<string, CachedSound> cachedSounds = new Dictionary<string, CachedSound>();
 
         public AudioPlaybackEngine(int sampleRate = 44100, int channelCount = 2)
         {
-            outputDevice = new WaveOutEvent();
             mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount));
             mixer.ReadFully = true;
-            outputDevice.Init(mixer);
-            outputDevice.Play();
+        }
+
+        public void Init(int deviceNumber)
+        {
+            if (outputDevice != null) outputDevice.Dispose();
+
+            var output = new WaveOutEvent();
+            output.DeviceNumber = deviceNumber;
+            output.Init(mixer);
+            output.Play();
+
+            outputDevice = output;
         }
 
         public void PlaySound(string fileName)
@@ -35,6 +44,16 @@ namespace JNSoundboard
             PlaySound(cachedSound);
         }
 
+        public void PlaySound(CachedSound sound)
+        {
+            AddMixerInput(new CachedSoundSampleProvider(sound));
+        }
+
+        public void StopAllSounds()
+        {
+            mixer.RemoveAllMixerInputs();
+        }
+
         private ISampleProvider ConvertToRightChannelCount(ISampleProvider input)
         {
             if (input.WaveFormat.Channels == mixer.WaveFormat.Channels)
@@ -48,11 +67,6 @@ namespace JNSoundboard
             throw new NotImplementedException("Not yet implemented this channel count conversion");
         }
 
-        public void PlaySound(CachedSound sound)
-        {
-            AddMixerInput(new CachedSoundSampleProvider(sound));
-        }
-
         private void AddMixerInput(ISampleProvider input)
         {
             var resampled = new WdlResamplingSampleProvider(input, mixer.WaveFormat.SampleRate);
@@ -61,7 +75,11 @@ namespace JNSoundboard
 
         public void Dispose()
         {
-            outputDevice.Dispose();
+            if (outputDevice != null)
+            {
+                outputDevice.Dispose();
+                outputDevice = null;
+            }
         }
 
         public static readonly AudioPlaybackEngine Instance = new AudioPlaybackEngine(44100, 2);
