@@ -37,8 +37,6 @@ namespace JNSoundboard
             tbStopSoundKeys.Text = Helper.keysToString(XMLSettings.soundboardSettings.StopSoundKeys);
 
             cbMinimizeToTray.Checked = XMLSettings.soundboardSettings.MinimizeToTray;
-
-            cbPlaySoundsOverEachOther.Checked = XMLSettings.soundboardSettings.PlaySoundsOverEachOther;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -93,8 +91,6 @@ namespace JNSoundboard
                     XMLSettings.soundboardSettings.LoadXMLFiles = loadXMLFilesList.ToArray();
 
                     XMLSettings.soundboardSettings.MinimizeToTray = cbMinimizeToTray.Checked;
-
-                    XMLSettings.soundboardSettings.PlaySoundsOverEachOther = cbPlaySoundsOverEachOther.Checked;
 
                     XMLSettings.SaveSoundboardSettingsXML();
 

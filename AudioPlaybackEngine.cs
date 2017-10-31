@@ -8,6 +8,8 @@ namespace JNSoundboard
 {
     class AudioPlaybackEngine : IDisposable
     {
+        public static readonly AudioPlaybackEngine Instance = new AudioPlaybackEngine(44100, 2);
+
         private IWavePlayer outputDevice;
         private readonly MixingSampleProvider mixer;
         private IDictionary<string, CachedSound> cachedSounds = new Dictionary<string, CachedSound>();
@@ -74,10 +76,12 @@ namespace JNSoundboard
             {
                 return input;
             }
+
             if (input.WaveFormat.Channels == 1 && mixer.WaveFormat.Channels == 2)
             {
                 return new MonoToStereoSampleProvider(input);
             }
+
             throw new NotImplementedException("Not yet implemented this channel count conversion");
         }
 
@@ -95,7 +99,5 @@ namespace JNSoundboard
                 outputDevice = null;
             }
         }
-
-        public static readonly AudioPlaybackEngine Instance = new AudioPlaybackEngine(44100, 2);
     }
 }

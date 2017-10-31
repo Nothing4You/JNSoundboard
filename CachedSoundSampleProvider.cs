@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NAudio.Wave;
 
 namespace JNSoundboard
@@ -21,8 +17,11 @@ namespace JNSoundboard
         {
             var availableSamples = cachedSound.AudioData.Length - position;
             var samplesToCopy = Math.Min(availableSamples, count);
+
             Array.Copy(cachedSound.AudioData, position, buffer, offset, samplesToCopy);
+
             position += samplesToCopy;
+
             return (int)samplesToCopy;
         }
 

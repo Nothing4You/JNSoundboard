@@ -9,7 +9,7 @@ namespace JNSoundboard
 {
     public class XMLSettings
     {
-        readonly static SoundboardSettings DEFAULT_SOUNDBOARD_SETTINGS = new SoundboardSettings(new Keys[] { }, new LoadXMLFile[] { new LoadXMLFile(new Keys[] { }, "") }, true, false, "", "");
+        readonly static SoundboardSettings DEFAULT_SOUNDBOARD_SETTINGS = new SoundboardSettings(new Keys[] { }, new LoadXMLFile[] { new LoadXMLFile(new Keys[] { }, "") }, true, "", "");
 
         internal static SoundboardSettings soundboardSettings = new SoundboardSettings();
 
@@ -65,17 +65,16 @@ namespace JNSoundboard
         {
             public Keys[] StopSoundKeys;
             public LoadXMLFile[] LoadXMLFiles;
-            public bool MinimizeToTray, PlaySoundsOverEachOther;
+            public bool MinimizeToTray;
             public string LastPlaybackDevice, LastLoopbackDevice;
 
             public SoundboardSettings() { }
 
-            public SoundboardSettings(Keys[] stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, bool playSoundsOverEachOther, string lastPlaybackDevice, string lastLoopbackDevice)
+            public SoundboardSettings(Keys[] stopSoundKeys, LoadXMLFile[] loadXMLFiles, bool minimizeToTray, string lastPlaybackDevice, string lastLoopbackDevice)
             {
                 StopSoundKeys = stopSoundKeys;
                 LoadXMLFiles = loadXMLFiles;
                 MinimizeToTray = minimizeToTray;
-                PlaySoundsOverEachOther = playSoundsOverEachOther;
                 LastPlaybackDevice = lastPlaybackDevice;
                 LastLoopbackDevice = lastLoopbackDevice;
             }

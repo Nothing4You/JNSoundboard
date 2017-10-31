@@ -193,7 +193,7 @@ namespace JNSoundboard
 
         private void playSound(string file)
         {
-            if (!XMLSettings.soundboardSettings.PlaySoundsOverEachOther) stopPlayback();
+            stopPlayback();
 
             try
             {
