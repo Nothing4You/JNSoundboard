@@ -15,7 +15,6 @@ namespace JNSoundboard
         WaveIn loopbackSourceStream = null;
         BufferedWaveProvider loopbackWaveProvider = null;
         WaveOut loopbackWaveOut = null;
-        WaveOut playbackWaveOut = null;
 
         Random rand = new Random();
 
@@ -46,6 +45,38 @@ namespace JNSoundboard
             //add events after settings have been loaded
             cbPlaybackDevices.SelectedIndexChanged += cbPlaybackDevices_SelectedIndexChanged;
             cbLoopbackDevices.SelectedIndexChanged += cbLoopbackDevices_SelectedIndexChanged;
+
+            initAudioPlaybackEngine();
+
+            AudioPlaybackEngine.Instance.AllInputEnded += OnAllInputEnded;
+        }
+
+        private void OnAllInputEnded(object sender, EventArgs e)
+        {
+            if (keyUpPushToTalkKey)
+            {
+                keyUpPushToTalkKey = false;
+                Keyboard.sendKey(pushToTalkKey, false);
+            }
+        }
+
+        private void initAudioPlaybackEngine()
+        {
+            int deviceNumber = cbPlaybackDevices.SelectedIndex;
+
+            try
+            {
+                AudioPlaybackEngine.Instance.Init(deviceNumber);
+            }
+            catch (NAudio.MmException ex)
+            {
+                SystemSounds.Beep.Play();
+                string msg = ex.ToString();
+                if (msg.Contains("AlreadyAllocated calling waveOutOpen")) {
+                    msg = "Failed to open device. Already in exclusive use by another application? \n\n" + msg;
+                }
+                MessageBox.Show(msg);
+            }
         }
 
         private void loadWindows()
@@ -157,33 +188,16 @@ namespace JNSoundboard
 
         private void stopPlayback()
         {
-            try
-            {
-                if (playbackWaveOut != null && playbackWaveOut.PlaybackState == PlaybackState.Playing)
-                {
-                    playbackWaveOut.Stop();
-                    playbackWaveOut.Dispose();
-                    playbackWaveOut = null;
-                }
-            }
-            catch (Exception) { }
+            AudioPlaybackEngine.Instance.StopAllSounds();
         }
 
         private void playSound(string file)
         {
-            int deviceNumber = cbPlaybackDevices.SelectedIndex;
-
             if (!XMLSettings.soundboardSettings.PlaySoundsOverEachOther) stopPlayback();
-
-            if (playbackWaveOut == null) playbackWaveOut = new WaveOut();
-
-            playbackWaveOut.DeviceNumber = deviceNumber;
 
             try
             {
-                playbackWaveOut.Init(new AudioFileReader(file));
-
-                playbackWaveOut.Play();
+                AudioPlaybackEngine.Instance.PlaySound(file);
             }
             catch (FormatException ex)
             {
@@ -519,7 +533,7 @@ namespace JNSoundboard
                     {
                         if (keysJustPressed == null || !keysJustPressed.Intersect(XMLSettings.soundboardSettings.StopSoundKeys).Any())
                         {
-                            if (playbackWaveOut != null && playbackWaveOut.PlaybackState == PlaybackState.Playing) playbackWaveOut.Stop();
+                            stopPlayback();
 
                             keysJustPressed = XMLSettings.soundboardSettings.StopSoundKeys;
 
@@ -572,7 +586,7 @@ namespace JNSoundboard
                 {
                     if (!Keyboard.IsKeyDown(pushToTalkKey)) keyUpPushToTalkKey = false;
 
-                    if (playbackWaveOut.PlaybackState != PlaybackState.Playing || !Helper.isForegroundWindow((string)cbWindows.SelectedItem))
+                    if (!Helper.isForegroundWindow((string)cbWindows.SelectedItem))
                     {
                         keyUpPushToTalkKey = false;
                         Keyboard.sendKey(pushToTalkKey, false);
@@ -648,6 +662,8 @@ namespace JNSoundboard
 
             stopPlayback();
 
+            initAudioPlaybackEngine();
+            
             string deviceName = (string)cbPlaybackDevices.SelectedItem;
             XMLSettings.soundboardSettings.LastPlaybackDevice = deviceName;
 
