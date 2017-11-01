@@ -83,7 +83,9 @@ namespace JNSoundboard
         {
             cbWindows.Items.Clear();
 
-            cbWindows.Items.Add("");
+            cbWindows.Items.Add("[Any window]");
+
+            cbWindows.SelectedIndex = 0;
 
             Process[] processlist = Process.GetProcesses();
 
@@ -504,7 +506,7 @@ namespace JNSoundboard
                                 && soundHotkeys[i].SoundLocations.Length > 0 && soundHotkeys[i].SoundLocations.Any(x => File.Exists(x)))
                             {
                                 if (cbEnablePushToTalk.Checked && !keyUpPushToTalkKey && !Keyboard.IsKeyDown(pushToTalkKey)
-                                    && Helper.isForegroundWindow((string)cbWindows.SelectedItem))
+                                    && (cbWindows.SelectedIndex == 0 || Helper.isForegroundWindow((string)cbWindows.SelectedItem)))
                                 {
                                     keyUpPushToTalkKey = true;
                                     bool result = Keyboard.sendKey(pushToTalkKey, true);
@@ -586,7 +588,7 @@ namespace JNSoundboard
                 {
                     if (!Keyboard.IsKeyDown(pushToTalkKey)) keyUpPushToTalkKey = false;
 
-                    if (!Helper.isForegroundWindow((string)cbWindows.SelectedItem))
+                    if (cbWindows.SelectedIndex != 0 && !Helper.isForegroundWindow((string)cbWindows.SelectedItem))
                     {
                         keyUpPushToTalkKey = false;
                         Keyboard.sendKey(pushToTalkKey, false);
@@ -729,26 +731,18 @@ namespace JNSoundboard
         {
             if (cbEnablePushToTalk.Checked)
             {
-                if (tbPushToTalkKey.Text == "" || (string)cbWindows.SelectedItem == "")
+                if (tbPushToTalkKey.Text == "")
                 {
                     cbEnablePushToTalk.Checked = false;
-                    MessageBox.Show("There is either no push to talk key entered, or no window selected");
+                    MessageBox.Show("There is no push to talk key entered");
                     return;
                 }
-
-                cbWindows.Enabled = false;
             }
-            else cbWindows.Enabled = true;
         }
 
         private void btnReloadWindows_Click(object sender, EventArgs e)
         {
             loadWindows();
-        }
-
-        private void cbWindows_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            cbEnable.Checked = false;
         }
     }
 }

@@ -6312,6 +6312,19 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
+  <data name="btnReloadWindows.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAE
+        UgAABFIB0OgMQQAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAXZJREFUKFN1kTtI
+        A0EQhjfaiM/YqIUItham1EoQC8FCETnEe+TucucZU9sHxFdha2OvRSxsFKy0CraKnZYqQSEJYkCi+Pgm
+        WfA98DMz//yzszur/jPP85bAgmVZ7Zr6ZbEoipp93x8Iw3A4lUqN0LALHl3X3bJtu0Xr6gbZhHgOwRmo
+        gmeNV/h37XcymUyrblGKUycplMAdxW2wCreCz8O9gVvigGv24qcZEpe775NU8FMy1TCMRgHxBtxFMpkc
+        FZ54HTwAQ5ruaTr6Nh6Dn4VPEMYETJ8hf4I/kWKZ5ODrY7PZbIOcrtOaMXEQ7Q0oKRryCIpsrV+KxHFO
+        XaY4UVPXTSaNwRXBuTQtEhzjhxzH6SPOEVdothC2yT+RJ8AhqMLPK/kfOZ1Jsp1TmmTFsrUC/JWAvED+
+        gs+h79DTlTJNs5PCni5Kk1xF3nBN4yXcWhAE3Vr+aXIKok0EZXyIuCedTnfxBbJZ2eLfJltEHPG+cU39
+        MKU+AL40wy8HTX1QAAAAAElFTkSuQmCC
+</value>
+  </data>
   <metadata name="pushToTalkKeyTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>332, 17</value>
   </metadata>

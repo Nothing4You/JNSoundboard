@@ -49,6 +49,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.texttospeechToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.cbLoopbackDevices = new System.Windows.Forms.ComboBox();
             this.btnPlaySelectedSound = new System.Windows.Forms.Button();
@@ -63,7 +64,6 @@
             this.tbPushToTalkKey = new System.Windows.Forms.TextBox();
             this.cbAudioDevices = new System.Windows.Forms.GroupBox();
             this.pushToTalkKeyTimer = new System.Windows.Forms.Timer(this.components);
-            this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.gbPushToTalk.SuspendLayout();
             this.cbAudioDevices.SuspendLayout();
@@ -255,6 +255,13 @@
             this.texttospeechToolStripMenuItem.Text = "Text-to-speech";
             this.texttospeechToolStripMenuItem.Click += new System.EventHandler(this.texttospeechToolStripMenuItem_Click);
             // 
+            // checkForUpdateToolStripMenuItem
+            // 
+            this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
+            this.checkForUpdateToolStripMenuItem.Text = "Check for update";
+            this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
+            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -353,7 +360,6 @@
             this.cbWindows.Name = "cbWindows";
             this.cbWindows.Size = new System.Drawing.Size(161, 21);
             this.cbWindows.TabIndex = 14;
-            this.cbWindows.SelectedIndexChanged += new System.EventHandler(this.cbWindows_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -401,13 +407,6 @@
             // pushToTalkKeyTimer
             // 
             this.pushToTalkKeyTimer.Tick += new System.EventHandler(this.pushToTalkKeyTimer_Tick);
-            // 
-            // checkForUpdateToolStripMenuItem
-            // 
-            this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
-            this.checkForUpdateToolStripMenuItem.Text = "Check for update";
-            this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
             // 
             // MainForm
             // 
